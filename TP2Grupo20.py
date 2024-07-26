@@ -47,13 +47,6 @@ def getpass_custom(prompt='Password: '):
 # Var
 # arrayUsuarios: ArregloModeradoresYEstudiantes
 # arrayDatos : Datos
-
-ejemplo = [['francopierabella10@gmaiil.com','1223','Activo','Moderador'], # Id 0
-           ['alejoScarpe@gmail.com','1231','Activo','Estudiante'], # Id 1
-           ['villalbamatias@gmail.com','1212','Activo','Estudiante'], # Id 2
-           ['manuelreal@gmail.com','2121','Activo','Estudiante'], # Id 3
-           ['carlos@gmail.com','3131','Inactivo','Estudiante']] # Id 4
-
             
 
 def calcularEdad(fecha):
@@ -108,115 +101,7 @@ def contarModeradores(array):
         if array[i][3] == 'Moderador':
             cont +=1
     return cont
-          
-    
-
-def cargaDeUsuariosInicio(arrayUsuarios,arrayDatos,cantEst,cantMods):
-    if contarEstudiantes(arrayUsuarios) >= 4 and contarModeradores(arrayUsuarios) >= 1:
-        print('Puedes loguearte! ')
-    else:
-        print('Para poder loguearte necesitamos al menos 4 estudiantes y un moderador!')
-        print()
-        print('Cargalos aqui... ')
-        print()
-        if arrayUsuarios[0][0] == '':
-            print('Carga de los estudiantes!')
-            for i in range (cantEst):
-                print()
-                print('Carga tu email,tu contraseña y tu estado')
-                print()
-                arrayUsuarios[i][0] = input('Ingrese su email: ')
-                arrayUsuarios[i][1] = getpass_custom('Ingrese su contraseña: ')
-                arrayUsuarios[i][2] = input('Ingrese su estado: ')
-                arrayUsuarios[i][3] = 'Estudiante' 
-                print()
-                print('Carga ahora tus datos personales (nombre,fecha de nacimiento,sexo,biografia y hobbies): ')
-                arrayDatos[i][0] = input('Ingresa tu nombre: ')
-                fechaDeNacimiento = input('Ingresa tu fecha de nacimiento: ')
-                while not ingresarFechaValida(fechaDeNacimiento):
-                    print('Fecha invalida. Por favor ingresa una fecha correcta')
-                    fechaDeNacimiento = input('Ingresa tu fecha de nacimiento: ')
-                arrayDatos[i][1] = fechaDeNacimiento       
-                arrayDatos[i][2] = input('Ingrese su sexo(F, M o N): ')
-                arrayDatos[i][3] = input('Ingrese su biografia: ')
-                arrayDatos[i][4] = input('Ingresa tus hobbies: ')
-                arrayDatos[i][5] = calcularEdad(fechaDeNacimiento)
-                print('El estudiante ',i,' ha sido cargado correctamente')
-                print()
-            print('\n')
-            print('Carga el/los moderadores \n')
-            for k in range(cantMods):
-                arrayUsuarios[cantEst + k][0] = input('Ingrese su Email: ')
-                arrayUsuarios[cantEst + k][1] = getpass_custom('Ingrese su contraseña: ')
-                arrayUsuarios[cantEst + k][2] = input('Ingrese su estado: ')
-                arrayUsuarios[cantEst + k][3] = 'Moderador'
-            print('Carga Completa!')
-        else: # Quiere decir que eligio primero registrarse antes que loguearse
-            print('Para poder Loguearte necesitamos cargar los estudiantes y moderadores restantes! ')
-            
-            if arrayUsuarios[0][3] == 'Estudiante':
-                for i in range(1,cantEst):
-                    arrayUsuarios[i][0] = input('Ingrese su email: ')
-                    arrayUsuarios[i][1] = getpass_custom('Ingrese su contraseña: ')
-                    arrayUsuarios[i][2] = input('Ingrese su estado: ')
-                    arrayUsuarios[i][3] = 'Estudiante' 
-                    print()
-                    print('Carga ahora tus datos personales (nombre,fecha de nacimiento,sexo,biografia y hobbies): ')
-                    arrayDatos[i][0] = input('Ingresa tu nombre: ')
-                    fechaDeNacimiento = input('Ingresa tu fecha de nacimiento: ')
-                    while not ingresarFechaValida(fechaDeNacimiento):
-                        print('Fecha invalida. Por favor ingresa una fecha correcta')
-                        fechaDeNacimiento = input('Ingresa tu fecha de nacimiento: ')
-                    arrayDatos[i][1] = fechaDeNacimiento
-                    arrayDatos[i][2] = input('Ingrese su sexo(F, M o N): ')
-                    arrayDatos[i][3] = input('Ingrese su biografia: ')
-                    arrayDatos[i][4] = input('Ingresa tus hobbies: ')
-                    arrayDatos[i][5] = calcularEdad(fechaDeNacimiento)
-                    print()
-                    print('El estudiante ',i, ' ha sido cargado correctamente.')
-                    print()
-                print()
-                print('Carga el/ los moderadores  \n')
-                for l in range(cantMods):
-                    print('Ingresa sus datos: \n')
-                    arrayUsuarios[cantEst + l][0] = input('Ingrese su Email: ')
-                    arrayUsuarios[cantEst + l][1] = getpass_custom('Ingrese su contraseña: ')
-                    arrayUsuarios[cantEst + l][2] = input('Ingrese su estado: ')
-                    arrayUsuarios[cantEst + l][3] = 'Moderador'
-                    print('El moderador ha sido cargado correctamente.')
-                print()
-            elif arrayUsuarios[0][3] == 'Moderador':
-                for o in range(1,cantMods):
-                    print('Ingresa sus datos: \n')
-                    arrayUsuarios[o][0] = input('Ingrese su Email: ')
-                    arrayUsuarios[o][1] = getpass_custom('Ingrese su contraseña: ')
-                    arrayUsuarios[o][2] = input('Ingrese su estado: ')
-                    arrayUsuarios[o][3] = 'Moderador'
-                    print('El moderador ha sido cargado correctamente.')
-                    
-                print('Carga los estudiantes faltantes')
-                print('\n')
-                for i in range(cantMods,cantMods + cantEst):
-                    arrayUsuarios[i][0] = input('Ingrese su email: ')
-                    arrayUsuarios[i][1] = getpass_custom('Ingrese su contraseña: ')
-                    arrayUsuarios[i][2] = input('Ingrese su estado: ')
-                    arrayUsuarios[i][3] = 'Estudiante' 
-                    print()
-                    print('Carga ahora tus datos personales (nombre,fecha de nacimiento,sexo,biografia y hobbies): ')
-                    arrayDatos[i][0] = input('Ingresa tu nombre: ')
-                    fechaDeNacimiento = input('Ingresa tu fecha de nacimiento: ')
-                    while not ingresarFechaValida(fechaDeNacimiento):
-                        print('Fecha invalida. Por favor ingresa una fecha correcta')
-                        fechaDeNacimiento = input('Ingresa tu fecha de nacimiento: ')
-                    arrayDatos[i][1] = fechaDeNacimiento
-                    arrayDatos[i][2] = input('Ingrese su sexo(F, M o N): ')
-                    arrayDatos[i][3] = input('Ingrese su biografia: ')
-                    arrayDatos[i][4] = input('Ingresa tus hobbies: ')
-                    arrayDatos[i][5] = calcularEdad(fechaDeNacimiento)
-                    
-                    print()
-                    print('El estudiante ', i , ' ha sido cargado correctamente.') 
-                    print()    
+             
             
             
 def Registrarse(arrayUsuarios,arrayDatos):
@@ -225,31 +110,40 @@ def Registrarse(arrayUsuarios,arrayDatos):
     while aux != 'e' and aux != 'm':
         print('Error! Responde -e- o -m-')
         aux = input('Eres estudiante (e) o moderador (m)?: ')
-    print('A continuacion, Carga tu Email, contraseña y estado')
-    print('\n')
-    i = 0
-    while arrayUsuarios[i][0] != '':
-        i += 1
-    arrayUsuarios[i][0] = input('ingresa tu email: ')
-    arrayUsuarios[i][1] = getpass_custom('ingresa tu contraseña: ')
-    arrayUsuarios[i][2] = input('Ingresa tu estado: ')
-    if aux == 'm':
-        arrayUsuarios[i][3] = 'Moderador'
-    else:
-        arrayUsuarios[i][3] = 'Estudiante'
-        print( )
-        print('Por ultimo, carga tu nombre, tu fecha de nacimiento,tu sexo,tu biografia y tus hobbies')
-        print()
-        arrayDatos[i][0] = input('Ingresa tu nombre: ')
-        fechaDeNacimiento = input('Ingresa tu fecha de nacimiento: ')
-        while not ingresarFechaValida(fechaDeNacimiento):
-            print('Fecha invalida. Por favor ingresa una fecha correcta')
+    if (aux == 'e' and contarEstudiantes(arrayUsuarios) > 8) or (aux == 'm' and contarModeradores(arrayUsuarios) > 4):
+        if aux == 'e':
+            print('Ya hemos llegado al maximo de Estudiantes! No puedes registrar mas!')
+        else:
+            print('Ya hemos llegado al maximo de Moderadores! No puedes registrar mas!')
+    else:   
+        print('A continuacion, Carga tu Email, contraseña y estado')
+        print('\n')
+        i = 0
+        while arrayUsuarios[i][0] != '':
+            i += 1
+        arrayUsuarios[i][0] = input('ingresa tu email: ')
+        arrayUsuarios[i][1] = getpass_custom('ingresa tu contraseña: ')
+        arrayUsuarios[i][2] = input('Ingresa tu estado: ').capitalize()
+        if aux == 'm':
+            arrayUsuarios[i][3] = 'Moderador'
+        else:
+            arrayUsuarios[i][3] = 'Estudiante'
+            j = 0
+            while arrayDatos[j][0] != '':
+                j += 1
+            print()
+            print('Por ultimo, carga tu nombre, tu fecha de nacimiento,tu sexo,tu biografia y tus hobbies')
+            print()
+            arrayDatos[j][0] = input('Ingresa tu nombre: ')
             fechaDeNacimiento = input('Ingresa tu fecha de nacimiento: ')
-        arrayDatos[i][1] = fechaDeNacimiento    
-        arrayDatos[i][2] = input('Ingresa tu sexo (F, M o N): ')
-        arrayDatos[i][3] = input('Ingresa tu biografia: ')
-        arrayDatos[i][4] = input('Ingresa tus hobbies: ')
-        arrayDatos[i][5] = calcularEdad(fechaDeNacimiento)
+            while not ingresarFechaValida(fechaDeNacimiento):
+                print('Fecha invalida. Por favor ingresa una fecha correcta')
+                fechaDeNacimiento = input('Ingresa tu fecha de nacimiento: ')
+            arrayDatos[j][1] = fechaDeNacimiento    
+            arrayDatos[j][2] = input('Ingresa tu sexo (F, M o N): ')
+            arrayDatos[j][3] = input('Ingresa tu biografia: ')
+            arrayDatos[j][4] = input('Ingresa tus hobbies: ')
+            arrayDatos[j][5] = calcularEdad(fechaDeNacimiento)
 
 
 def logueo(arrayUsuarios):
@@ -275,7 +169,7 @@ def logueo(arrayUsuarios):
         emailIngresado = input('Ingresa tu email: ')
         contraseñaIngresada = getpass_custom('Ingresa tu contraseña: ')
         intentos -= 1
-        print('Te quedan ',intentos,' intentos') 
+        print('Te quedan ',intentos + 1,' intentos') 
         print()
     if intentos == 0:
         return -1
@@ -301,7 +195,7 @@ def menuPrincipal():
     print()
     print('1. Log in')
     print()
-    print('2. Registrarse')
+    print('2. Registro')
     print()
     print('0. Salir')
 
@@ -339,17 +233,16 @@ def menuPrincipalEstudiante():
     print('0. Salir:')   
     
 
-def editarDatos(id,array):
+def editarDatos(id,arrayDatos):
     os.system('cls')
     fechaDeNacimiento = input('Ingresa tu fecha de nacimiento: ')
     while not ingresarFechaValida(fechaDeNacimiento):
         print('Fecha invalida. Por favor ingresa una fecha correcta')
         fechaDeNacimiento = input('Ingresa tu fecha de nacimiento: ')
-    fechaAux = datetime.strptime(fechaDeNacimiento,'%Y/%m/%d')
-    array[id][2] = input('Sexo (F, M o N): ') 
-    array[id][3] = input('Biografia: ')
-    array[id][4] = input('Hobbies: ')
-    array[id][5] = calcularEdad(fechaAux)
+    arrayDatos[id][2] = input('Sexo (F, M o N): ') 
+    arrayDatos[id][3] = input('Biografia: ')
+    arrayDatos[id][4] = input('Hobbies: ')
+    arrayDatos[id][5] = calcularEdad(fechaDeNacimiento)
     print()
     print('Datos Actualizados!')
     print()
@@ -391,10 +284,10 @@ def gestionarPerfil(id,arrayDatos,arrayUsuarios):
         os.system('pause')
    
 def mostrarDatos(id,arrayDatos,cantEstudiantes):
+    print('Aqui tienes tus candidatos. ')
+    print()
     for i in range(cantEstudiantes):
         if i != id:
-            print('Aqui tienes tus candidatos. ')
-            print()
             print('----------------------------')
             print()
             print('Estudiante numero ',i,'. Sus datos son: ')
@@ -404,11 +297,10 @@ def mostrarDatos(id,arrayDatos,cantEstudiantes):
             print('Su biografia: ',arrayDatos[i][3])
             print('Sus hobbies: ',arrayDatos[i][4])
             print()
-            print('----------------------------')
             print()
     
 
-def gestionarCandidatos(cantEstudiantesCargados,arrayDatos,arrayUsuarios,idDeEstudianteLogueado,arrayReporte):
+def gestionarCandidatos(cantEstudiantesCargados,arrayDatos,arrayUsuarios,idDeEstudianteLogueado,arrayReporte,arrayMotivos):
     os.system('cls') 
     print()
     print()
@@ -448,10 +340,10 @@ def gestionarCandidatos(cantEstudiantesCargados,arrayDatos,arrayUsuarios,idDeEst
         p = 0
         while arrayReporte[p][0] != '':
             p += 1
-        arrayReporte[p][0] = str(idDeEstudianteLogueado)
-        arrayReporte[p][1] = str(idDeEstudianteAreportar)
-        arrayReporte[p][2] = motivo
-        arrayReporte[p][3] = str(0)
+        arrayReporte[p][0] = idDeEstudianteLogueado
+        arrayReporte[p][1] = idDeEstudianteAreportar
+        arrayReporte[p][2] = 0
+        arrayMotivos[p] = motivo
         print('')
         os.system('pause')
     else:
@@ -584,19 +476,7 @@ def principal():
     arrayUsuarios = [[''] * 4 for n in range(12)]
     arrayDatos = [[''] * 6 for j in range(8)]
     # Login 
-    cantEstudiantes = int(input('Cuantos estudiantes vas a cargar? (minimo 4 y maximo 8): '))
-    arrayLikes = [[0] * cantEstudiantes for k in range(cantEstudiantes)]
-    cargaMatrizDeLikes(arrayLikes,cantEstudiantes)
-    print()
-    while cantEstudiantes < 4 and cantEstudiantes > 8:
-        print('Error! Tiene que ser minimo 4 y maximo 8!')
-        cantEstudiantes = int(input('Cuantos estudiantes vas a cargar? (minimo 4 y maximo 8): '))
-        print()
-    cantModeradores = int(input('Cuantos moderadores vas a cargar? (minimo 1 maximo 4): '))
-    while cantModeradores < 1 and cantModeradores > 4:
-        print('Error! Minimo 1 Maximo 4!')
-        cantModeradores = int(input('Cuantos moderadores vas a cargar? (minimo 1 maximo 4): '))
-        print()  
+    print() 
     logOReg = 1
     while logOReg != 0:    
         menuPrincipal()
@@ -606,49 +486,66 @@ def principal():
             logOReg = int(input('Elije una opcion: '))
         if logOReg == 2:
             Registrarse(arrayUsuarios,arrayDatos)
-        if logOReg != 0:    
-            cargaDeUsuariosInicio(arrayUsuarios,arrayDatos,cantEstudiantes,cantModeradores)
+        elif logOReg == 1:    
             cantidadDeEstudiantesCargados = contarEstudiantes(arrayUsuarios)
-            idDeEstudianteLogueado = logueo(arrayUsuarios)
-            if idDeEstudianteLogueado != -1 :   
-                arrayReporte = [[''] * 4 for n in range(cantidadDeEstudiantesCargados)]
-                if arrayUsuarios[idDeEstudianteLogueado][3] == 'Moderador':
-                    segundaOpcion = 1
-                    while segundaOpcion != 0:
-                        menuPrincipalModeradores()
-                        eleccion = int(input('Elige una opcion (0,1,2,3): '))
-                        while eleccion not in range(4):
-                            print('Opcion Invalida!')
-                            eleccion = int(input('Elige una opcion (0,1,2,3): '))
-                        match eleccion:
-                            case 1: gestionarUsuarios(arrayUsuarios)
-                            case 2: gestionarReportes(arrayReporte) 
-                            case 3: enConstruccion()
-                            case 0: 
-                                print('Volviendo al menu de logueo!')
-                                os.system('pause')    
-                else:
-                    segundaOpcion = 1
-                    while segundaOpcion != 0 and arrayUsuarios[idDeEstudianteLogueado][2] == 'Activo':       
-                        menuPrincipalEstudiante()
-                        segundaOpcion = int(input('Elige una opcion (0,1,2,3,4)'))
-                        while segundaOpcion != 0 and segundaOpcion != 1 and segundaOpcion != 2 and segundaOpcion != 3 and segundaOpcion != 4:
-                            print('Error! Opcion invalida. ')
-                            segundaOpcion = int(input('Elige una opcion (0,1,2,3,4)'))
-                        match segundaOpcion:
-                            case 1: gestionarPerfil(idDeEstudianteLogueado,arrayDatos,arrayUsuarios)
-                            case 2: gestionarCandidatos(cantidadDeEstudiantesCargados,arrayDatos,arrayUsuarios,idDeEstudianteLogueado,arrayReporte)
-                            case 3: enConstruccion()
-                            case 4: reportesEstadisticos(arrayLikes,idDeEstudianteLogueado,cantidadDeEstudiantesCargados)
-                            case 0: 
-                                print('Volviendo al menu de logueo')  
-                                os.system('pause')
-                            
-                        # mostramos menu para estudiantes
+            cantidadDeModeradoresCargados = contarModeradores(arrayUsuarios)
+            if cantidadDeEstudiantesCargados < 4 :
+                print('Para poder loguearte, necesitamos como minimo 4 estudiantes! ')
+                print()
+                print('Volviendo a la pantalla de Log in. ')
+                os.system('pause')
+            elif cantidadDeModeradoresCargados < 1:
+                print('Para poder loguearte, necesitamos como minimo 1 moderador! ')
+                print()
+                print('Volviendo a la pantalla de Log in.')
+                os.system('pause')
             else:
-                print('Te has quedado sin intetos! ')
-                print('Vuelve mas tarde! ')
-                print('Adios!')
+                matrizLikes = [[0] * cantidadDeEstudiantesCargados for n in range(cantidadDeEstudiantesCargados)]
+                cargaMatrizDeLikes(matrizLikes,cantidadDeEstudiantesCargados)
+                print('')
+                idDeEstudianteLogueado = logueo(arrayUsuarios)
+                if idDeEstudianteLogueado != -1 :   
+                    arrayReporte = [[''] * 3 for n in range(25)]
+                    if arrayUsuarios[idDeEstudianteLogueado][3] == 'Moderador':
+                        segundaOpcion = 1
+                        while segundaOpcion != 0:
+                            menuPrincipalModeradores()
+                            eleccion = int(input('Elige una opcion (0,1,2,3): '))
+                            while eleccion not in range(4):
+                                print('Opcion Invalida!')
+                                eleccion = int(input('Elige una opcion (0,1,2,3): '))
+                            match eleccion:
+                                case 1: gestionarUsuarios(arrayUsuarios)
+                                case 2: gestionarReportes(arrayReporte) 
+                                case 3: enConstruccion()
+                                case 0: 
+                                    print('Volviendo al menu de logueo!')
+                                    os.system('pause')    
+                    else:
+                        segundaOpcion = 1
+                        while segundaOpcion != 0 and arrayUsuarios[idDeEstudianteLogueado][2] == 'Activo':       
+                            menuPrincipalEstudiante()
+                            segundaOpcion = int(input('Elige una opcion (0,1,2,3,4)'))
+                            while segundaOpcion != 0 and segundaOpcion != 1 and segundaOpcion != 2 and segundaOpcion != 3 and segundaOpcion != 4:
+                                print('Error! Opcion invalida. ')
+                                segundaOpcion = int(input('Elige una opcion (0,1,2,3,4)'))
+                            match segundaOpcion:
+                                case 1: gestionarPerfil(idDeEstudianteLogueado,arrayDatos,arrayUsuarios)
+                                case 2:
+                                    arrayMotivos = [''] * 25 
+                                    gestionarCandidatos(cantidadDeEstudiantesCargados,arrayDatos,arrayUsuarios,idDeEstudianteLogueado,arrayReporte,arrayMotivos)
+                                case 3: enConstruccion()
+                                case 4: reportesEstadisticos(matrizLikes,idDeEstudianteLogueado,cantidadDeEstudiantesCargados)
+                                case 0: 
+                                    print('Volviendo al menu de logueo')  
+                                    os.system('pause')                
+                else:
+                    print('Te has quedado sin intentos! ')
+                    print('Vuelve mas tarde! ')
+                    print('Adios!')
+        else:
+            print('Terminando Programa...')
+            os.system('pause')
 principal()
             
    
