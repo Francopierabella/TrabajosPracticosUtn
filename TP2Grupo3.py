@@ -148,6 +148,9 @@ def Registrarse(arrayUsuarios,arrayDatos):
             print('Estudiante Cargado correctamente! ')
             input()
 
+#Logueo es una funcion que retorna la id del usuario que se loguea. Si no se logueo nadie, es decir
+# se quedo sin intentos, retorna -1
+
 
 def logueo(arrayUsuarios):
     print('---------- LOG IN -----------')
@@ -368,7 +371,7 @@ def gestionarCandidatos(cantEstudiantesCargados,arrayDatos,arrayUsuarios,idDeUsu
         print()
         idDeEstudianteAreportar = int(input('Ingresa el ID del estudiante a reportar: '))
         while idDeEstudianteAreportar == idDeUsuarioLogueado or  arrayUsuarios[idDeEstudianteAreportar][0] == '' or arrayUsuarios[idDeEstudianteAreportar][3] == 'Moderador':
-            print('ID invalida. ')
+            print('ID invalida. Has ingresado una ID inexistente, igual a la tuya o la de un moderador! ')
             print()
             idDeEstudianteAreportar = int(input('Ingresa el ID del estudiante a reportar: '))
         motivo = input('ingresa el motivo por el cual lo reportas: ')
@@ -487,14 +490,15 @@ def gestionarReportes(arrayUsuarios,arrayReporte,arrayMotivos):
         if cantidadDeReportes == 0:
             print('No hay reportes cargados todavia!')
         else: 
-            j = 0
+            cantidadDeReportesNoVistosPorModeradores = 0
             for p in range(cantidadDeReportes):
                 if arrayReporte[p][2] == 0:
-                    j += 1
-            if j == 0:
+                    cantidadDeReportesNoVistosPorModeradores += 1
+            if cantidadDeReportesNoVistosPorModeradores == 0:
                 print('Los reportes ya han sido modificados por los moderadores!')
                 print()
             else:
+                print('Cantida de Reportes no vistos por moderadores: ',cantidadDeReportesNoVistosPorModeradores)
                 for i in range(cantidadDeReportes):
                     if arrayUsuarios[arrayReporte[i][0]][2] == 'Activo' and arrayUsuarios[arrayReporte[i][1]][2] == 'Activo' and arrayReporte[i][2] == 0:
                         print()
