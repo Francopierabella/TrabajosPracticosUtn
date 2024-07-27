@@ -1,9 +1,7 @@
-opc = 1
-def suma():
-    return 'hola'
-match opc:
-    case 1: 
-        a = suma()
-        if a == 'hola':
-            print('si')
-        
+a = 4
+for i in range(a):
+    print(i)
+    print('Puto')
+    a -= 1
+print(a)
+    

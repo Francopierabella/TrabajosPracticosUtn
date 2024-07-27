@@ -4,6 +4,17 @@ import os
 import msvcrt
 from datetime import datetime
 
+'''
+    Algoritmos y Estructuras de Datos
+
+    Trabajo Practico 2
+    Integrantes(Comision 101):
+        Franco Pierabella
+        Matias Villalba
+        Alejo Scarpetta
+        Manuel Real
+
+'''
 
 fecha_actual = datetime.now()   # Aqui calculamos la fecha de hoy con uso de la libreria Datetime
 año_actual = fecha_actual.year  # Aqui calculamos el año actual con uso de la libreria Datetime
@@ -28,25 +39,7 @@ def getpass_custom(prompt='Password: '):
             sys.stdout.write('*')
             sys.stdout.flush()
             
-'''
-    Algoritmos y Estructuras de Datos
 
-    Trabajo Practico 2
-    Integrantes(Comision 101):
-        Franco Pierabella
-        Matias Villalba
-        Alejo Scarpetta
-        Manuel Real
-
-'''
-
-# Type
-# ArregloModeradoresYEstudiantes: matriz [0 ... 11,0 .. 3]
-# Datos: matriz[0 ... 7,0 ... 4]
-
-# Var
-# arrayUsuarios: ArregloModeradoresYEstudiantes
-# arrayDatos : Datos
             
 
 def calcularEdad(fecha):
@@ -87,7 +80,9 @@ def ingresarFechaValida(fecha):
             return False
     return True
 
-            
+
+
+# contarEstudiantes recibe como parametro el array de los usuarios, y devuelve cuantos de ellos son estudiantes            
 def contarEstudiantes(array):
     cont = 0
     for i in range(12):
@@ -95,6 +90,8 @@ def contarEstudiantes(array):
             cont +=1
     return cont
 
+
+# contarModeradores recibe como parametro el array de los usuarios, y devuelve cuantos de ellos son moderadores            
 def contarModeradores(array):
     cont = 0
     for i in range(12):
@@ -126,6 +123,9 @@ def Registrarse(arrayUsuarios,arrayDatos):
         arrayUsuarios[i][2] = input('Ingresa tu estado: ').capitalize()
         if aux == 'm':
             arrayUsuarios[i][3] = 'Moderador'
+            print()
+            print('Moderador Cargado correctamente!')
+            input()
         else:
             arrayUsuarios[i][3] = 'Estudiante'
             j = 0
@@ -144,6 +144,9 @@ def Registrarse(arrayUsuarios,arrayDatos):
             arrayDatos[j][3] = input('Ingresa tu biografia: ')
             arrayDatos[j][4] = input('Ingresa tus hobbies: ')
             arrayDatos[j][5] = calcularEdad(fechaDeNacimiento)
+            print()
+            print('Estudiante Cargado correctamente! ')
+            input()
 
 
 def logueo(arrayUsuarios):
@@ -166,10 +169,10 @@ def logueo(arrayUsuarios):
         and (emailIngresado != arrayUsuarios[11][0] or contraseñaIngresada != arrayUsuarios[11][1])) and intentos > 0:
         print('Email y/o contraseña Incorrectas! ')
         print()
+        print('Te quedan ',intentos, ' intentos') 
         emailIngresado = input('Ingresa tu email: ')
         contraseñaIngresada = getpass_custom('Ingresa tu contraseña: ')
         intentos -= 1
-        print('Te quedan ',intentos + 1,' intentos') 
         print()
     if intentos == 0:
         return -1
@@ -235,14 +238,41 @@ def menuPrincipalEstudiante():
 
 def editarDatos(id,arrayDatos):
     os.system('cls')
+    print()
+    print('Estos son tus datos actuales: ')
+    print('Tu nombre: ',arrayDatos[id][0])
+    print('')
+    print('Tu fecha de nacimiento: ',arrayDatos[id][1])
+    print('')
+    print('Tu sexo: ',arrayDatos[id][2])
+    print('')
+    print('Tu biografia: ',arrayDatos[id][3])
+    print('')
+    print('Tus hobbies: ',arrayDatos[id][4])
+    print('')
+    print('Tu Edad: ',arrayDatos[id][5])
+    print('')
+    print('Aqui podras editar tu fecha de nacimiento,tu bio,tus hobbies y tu sexo ')
+    print()
     fechaDeNacimiento = input('Ingresa tu fecha de nacimiento: ')
     while not ingresarFechaValida(fechaDeNacimiento):
         print('Fecha invalida. Por favor ingresa una fecha correcta')
         fechaDeNacimiento = input('Ingresa tu fecha de nacimiento: ')
+    arrayDatos[id][1] = fechaDeNacimiento
     arrayDatos[id][2] = input('Sexo (F, M o N): ') 
     arrayDatos[id][3] = input('Biografia: ')
     arrayDatos[id][4] = input('Hobbies: ')
     arrayDatos[id][5] = calcularEdad(fechaDeNacimiento)
+    print()
+    print('Tu nueva fecha de nacimiento: ',arrayDatos[id][1])
+    print()
+    print('Tu nuevo sexo: ', arrayDatos[id][2])
+    print()
+    print('Tu nueva biografia: ',arrayDatos[id][3])
+    print()
+    print('Tus nuevos hobbies: ',arrayDatos[id][4])
+    print()
+    print('Tu nueva edad: ',arrayDatos[id][5])
     print()
     print('Datos Actualizados!')
     print()
@@ -250,6 +280,9 @@ def editarDatos(id,arrayDatos):
     os.system('pause')
     
 
+#           var 
+# eleccion: int
+# opcAuxiliar: string
 def gestionarPerfil(id,arrayDatos,arrayUsuarios):
     os.system('cls')
     print()
@@ -284,6 +317,7 @@ def gestionarPerfil(id,arrayDatos,arrayUsuarios):
         os.system('pause')
    
 def mostrarDatos(id,arrayDatos,cantEstudiantes):
+    os.system('cls')
     print('Aqui tienes tus candidatos. ')
     print()
     for i in range(cantEstudiantes):
@@ -299,8 +333,9 @@ def mostrarDatos(id,arrayDatos,cantEstudiantes):
             print()
             print()
     
+    
 
-def gestionarCandidatos(cantEstudiantesCargados,arrayDatos,arrayUsuarios,idDeEstudianteLogueado,arrayReporte,arrayMotivos):
+def gestionarCandidatos(cantEstudiantesCargados,arrayDatos,arrayUsuarios,idDeUsuarioLogueado,arrayReporte,arrayMotivos):
     os.system('cls') 
     print()
     print()
@@ -315,10 +350,10 @@ def gestionarCandidatos(cantEstudiantesCargados,arrayDatos,arrayUsuarios,idDeEst
         print('Opcion incorrecta! Por favor elige (a,b,c)')
         eleccion = input('Elige una opcion (a,b,c): ')
     if eleccion == 'a':
-        mostrarDatos(idDeEstudianteLogueado,arrayDatos,cantEstudiantesCargados)
+        mostrarDatos(idDeUsuarioLogueado,arrayDatos,cantEstudiantesCargados)
         meGusta = input('Ingresa el nombre del Estudiante con el que quieres hacer un futuro Matcheo: ')
-        while (meGusta != arrayDatos[0][0] and meGusta != arrayDatos[1][0] and meGusta != arrayDatos[2][0] and meGusta != arrayDatos[3][0]) or meGusta == arrayDatos[idDeEstudianteLogueado][0]:
-            if meGusta == arrayDatos[idDeEstudianteLogueado][0]:
+        while (meGusta != arrayDatos[0][0] and meGusta != arrayDatos[1][0] and meGusta != arrayDatos[2][0] and meGusta != arrayDatos[3][0]) or meGusta == arrayDatos[idDeUsuarioLogueado][0]:
+            if meGusta == arrayDatos[idDeUsuarioLogueado][0]:
                 print('No puedes gustarte a ti mismo. ')
             else:
                 print('Nombre incorrecto! Por favor ingresa un nombre de un estudiante')
@@ -332,7 +367,7 @@ def gestionarCandidatos(cantEstudiantesCargados,arrayDatos,arrayUsuarios,idDeEst
     elif eleccion == 'b':
         print()
         idDeEstudianteAreportar = int(input('Ingresa el ID del estudiante a reportar: '))
-        while idDeEstudianteAreportar == idDeEstudianteLogueado or  arrayUsuarios[idDeEstudianteAreportar][0] == '' or arrayUsuarios[idDeEstudianteAreportar][3] == 'Moderador':
+        while idDeEstudianteAreportar == idDeUsuarioLogueado or  arrayUsuarios[idDeEstudianteAreportar][0] == '' or arrayUsuarios[idDeEstudianteAreportar][3] == 'Moderador':
             print('ID invalida. ')
             print()
             idDeEstudianteAreportar = int(input('Ingresa el ID del estudiante a reportar: '))
@@ -340,11 +375,15 @@ def gestionarCandidatos(cantEstudiantesCargados,arrayDatos,arrayUsuarios,idDeEst
         p = 0
         while arrayReporte[p][0] != '':
             p += 1
-        arrayReporte[p][0] = idDeEstudianteLogueado
+        arrayReporte[p][0] = idDeUsuarioLogueado
         arrayReporte[p][1] = idDeEstudianteAreportar
         arrayReporte[p][2] = 0
         arrayMotivos[p] = motivo
         print('')
+        print('REPORTE')
+        print()
+        print('El usuario ',idDeUsuarioLogueado,' ha reportado al usuario',idDeEstudianteAreportar,' con el motivo: ',arrayMotivos[p])
+        print()
         os.system('pause')
     else:
         print('Volviendo al menu anterior.')
@@ -366,23 +405,23 @@ def enConstruccion():
         
     
 
-def reportesEstadisticos(matrizLikes,idDeEstudianteLogueado,cantDeEstudiantes):
+def reportesEstadisticos(matrizLikes,idDeUsuarioLogueado,cantDeEstudiantes):
     matcheoAmbasVeces = 0
     yoSiPeroElNo = 0
     ElSiPeroYoNo = 0
     for i in range(cantDeEstudiantes):
-        if idDeEstudianteLogueado != i:
-            if matrizLikes[idDeEstudianteLogueado][i] == matrizLikes[i][idDeEstudianteLogueado]:
+        if idDeUsuarioLogueado != i:
+            if matrizLikes[idDeUsuarioLogueado][i] == matrizLikes[i][idDeUsuarioLogueado]:
                 matcheoAmbasVeces += 1
     for j in range(cantDeEstudiantes):
-        if idDeEstudianteLogueado != j:
-            if matrizLikes[idDeEstudianteLogueado][j] == 1 and matrizLikes[j][idDeEstudianteLogueado] == 0:
+        if idDeUsuarioLogueado != j:
+            if matrizLikes[idDeUsuarioLogueado][j] == 1 and matrizLikes[j][idDeUsuarioLogueado] == 0:
                 yoSiPeroElNo += 1
     for k in range(cantDeEstudiantes):
-        if idDeEstudianteLogueado != k:
-            if matrizLikes[k][idDeEstudianteLogueado] == 1 and matrizLikes[idDeEstudianteLogueado][k] == 0:
+        if idDeUsuarioLogueado != k:
+            if matrizLikes[k][idDeUsuarioLogueado] == 1 and matrizLikes[idDeUsuarioLogueado][k] == 0:
                 ElSiPeroYoNo += 1
-    print('Porcentaje de matcheos mutuos: ',(matcheoAmbasVeces * 100 ) / cantDeEstudiantes,'%')
+    print('Porcentaje de matcheos mutuos: ',int((matcheoAmbasVeces * 100 ) / cantDeEstudiantes),'%')
     print()
     print('Personas a las que le dimos like pero no nos lo devolvieron: ',yoSiPeroElNo)
     print()
@@ -392,7 +431,7 @@ def reportesEstadisticos(matrizLikes,idDeEstudianteLogueado,cantDeEstudiantes):
                 
                 
     
-def gestionarUsuarios(arrayUsuarios): 
+def gestionarUsuarios(arrayUsuarios,idDeUsuarioLogeuado): 
     os.system('cls')
     print()
     print('a. Desactivar Usuario.')
@@ -404,63 +443,96 @@ def gestionarUsuarios(arrayUsuarios):
         opc = input('Elige una opcion (a,b,c): ')
     if opc == 'a':
         idDeUsuarioADesactivar = int(input('Ingresa el ID del usuario a desactivar: '))
-        while arrayUsuarios[idDeUsuarioADesactivar][0] == '':
-            print('No hay usuario con ese ID !')
+        while arrayUsuarios[idDeUsuarioADesactivar][0] == '' or idDeUsuarioADesactivar == idDeUsuarioLogeuado:
+            print('ID invalida! Has ingresado una id inexistente o tu misma id!')
             idDeUsuarioADesactivar = int(input('Ingresa el ID del estudiante a desactivar: '))
-        opcAuxiliar = input('Estas seguro que quieres desactivar al usuario '+ str(idDeUsuarioADesactivar) + ' ? Ingresa si o no')
-        while opcAuxiliar != 'si' and opcAuxiliar != 'no':
-            print('Opcion invalida! ')
-            opcAuxiliar = input('Estas seguro que quieres desactivar al usuario '+ str(idDeUsuarioADesactivar) + ' ? Ingresa si o no')
-        if opcAuxiliar == 'si':
-            arrayUsuarios[idDeUsuarioADesactivar][2] = 'Inactivo'
+        if arrayUsuarios[idDeUsuarioADesactivar][2] == 'Inactivo':
+            print('Este usuario ya esta inactivo! ')
             print()
-            print('El usuario ', idDeUsuarioADesactivar, ' ha sido eliminado.')
+            print('Volviendo al menu anterior...',input())
         else:
-            print('No has decidido eliminar al usuario ',idDeUsuarioADesactivar)
-        os.system('pause')
+            opcAuxiliar = input('Estas seguro que quieres desactivar al usuario '+ str(idDeUsuarioADesactivar) + ' ? Ingresa si o no')
+            while opcAuxiliar != 'si' and opcAuxiliar != 'no':
+                print('Opcion invalida! ')
+                opcAuxiliar = input('Estas seguro que quieres desactivar al usuario '+ str(idDeUsuarioADesactivar) + ' ? Ingresa si o no')
+            if opcAuxiliar == 'si':
+                arrayUsuarios[idDeUsuarioADesactivar][2] = 'Inactivo'
+                print()
+                print('El usuario ', idDeUsuarioADesactivar, ' ha sido eliminado.')
+            else:
+                print('No has decidido eliminar al usuario ',idDeUsuarioADesactivar)
+            os.system('pause')
     else:
         print('Volviendo al menu Anterior...')
         print()
         os.system('pause')
             
             
-def gestionarReportes(arrayUsuarios,arrayReporte):
+def gestionarReportes(arrayUsuarios,arrayReporte,arrayMotivos):
     os.system('cls')
-    cont = 0
-    while arrayReporte[cont][0] != '':
-        cont += 1
-    for i in range(cont):
-        if arrayUsuarios[arrayReporte[cont][0]][2] == 'Activo' and arrayReporte[cont][3] == '0':
-            print()
-            print(arrayReporte[cont])
-            print()
-            print('Como quieres proceder? ')
-            print()
-            print('a. Ignorar Reporte')
-            print()
-            print('b. Bloquear al reportante')
-            print()
-            opc = input('Elige una opcion (a,b): ')
-            while opc != 'a' and opc != 'b':
-                print('Opcion Invalida')
-                opc = input('Elige una opcion (a,b): ')
-            if opc == 'a':
-                arrayReporte[cont][3] = '2'
+    print()
+    print('a. Ver Reportes')
+    print()
+    print('b. Volver')
+    print()
+    opc = input('Elige una opcion (a,b): ')
+    while opc != 'a' and opc != 'b':
+        print('Opcion invalida! Debe ser -a- o -b-')
+        opc = input('Elige una opcion: (a,b)')
+    if opc == 'a':
+        cantidadDeReportes = 0
+        while arrayReporte[cantidadDeReportes][0] != '':
+            cantidadDeReportes += 1
+        print('CANTIDAD DE REPORTES: ',cantidadDeReportes)
+        if cantidadDeReportes == 0:
+            print('No hay reportes cargados todavia!')
+        else: 
+            j = 0
+            for p in range(cantidadDeReportes):
+                if arrayReporte[p][2] == 0:
+                    j += 1
+            if j == 0:
+                print('Los reportes ya han sido modificados por los moderadores!')
                 print()
-                print('El estado del reporte ',cont,' ha sido cambiado a 2.')
             else:
-                arrayReporte[cont][3] = '1'
-                print()
-                print('El estado del reporte ',cont,' ha sido cambiado a 1.')
-                print()
-                arrayUsuarios[arrayReporte[cont][1]][3] = 'Inactivo'
-                print('El Estado del usuario ',arrayReporte[cont][1],' ha sido cambiado a Inactivo.')
+                for i in range(cantidadDeReportes):
+                    if arrayUsuarios[arrayReporte[i][0]][2] == 'Activo' and arrayUsuarios[arrayReporte[i][1]][2] == 'Activo' and arrayReporte[i][2] == 0:
+                        print()
+                        print('REPORTE: ')
+                        print()
+                        print('El usuario ',arrayReporte[i][0],' ha reportado al usuario ',arrayReporte[i][1],' con el motivo: ',arrayMotivos[i])
+                        print()
+                        print('Como quieres proceder? ')
+                        print()
+                        print('a. Ignorar Reporte')
+                        print()
+                        print('b. Bloquear al reportante')
+                        print()
+                        print('c. Volver')
+                        opc2 = input('Elige una opcion (a,b): ')
+                        while opc2 != 'a' and opc2 != 'b':
+                            print('Opcion Invalida')
+                            opc2 = input('Elige una opcion (a,b): ')
+                        if opc2 == 'a':
+                            arrayReporte[i][2] = 2
+                            print()
+                            print('El estado del reporte ',i,' ha sido cambiado a 2.')
+                        elif opc2 == 'b':
+                            arrayReporte[i][2] = 1
+                            print()
+                            print('El estado del reporte ',i,' ha sido cambiado a 1.')
+                            print()
+                            arrayUsuarios[arrayReporte[i][1]][2] = 'Inactivo'
+                            print('El Estado del usuario ',arrayReporte[i][1],' ha sido cambiado a Inactivo.')
+                        else:
+                            print('Volviendo al menu anterior...')
+                            input()
     print()
     print('Volviendo al menu anterior...')            
-    os.system('pause')
+    input()
    
  
-#matrizLikes: matriz[0 ... 7,0 ... 7]
+# matrizLikes: matriz[0 ... 7,0 ... 7]
 
 def cargaMatrizDeLikes(array,cantEst):
     for i in range(cantEst):
@@ -471,10 +543,26 @@ def cargaMatrizDeLikes(array,cantEst):
                 array[i][j] = random.randint(0,1)
             
     
+# Type
+# ArregloModeradoresYEstudiantes: matriz [0 ... 11,0 .. 3] of strings
+# Datos: matriz[0 ... 7,0 ... 4] of strings
+# Reportes: matriz[0 ... 25,0 ... 2] or int
+# Motivos: array[0...25] of strigs
+# Likes: matriz[0... cantDeEstudiantes,0 ... cantDeEstudiantes] ?
+
+# Var
+# arrayUsuarios: ArregloModeradoresYEstudiantes
+# arrayDatos : Datos
+# arrayReportes : Reportes
+# arrayMotivos : Motivos
+# arrayLikes : Likes
+# logOReg,cantidadDeEstudiantesCargados,cantidadDeModeradoresCargados,idDeUsuarioLogueado,segundaOpcion: int
         
 def principal():
     arrayUsuarios = [[''] * 4 for n in range(12)]
     arrayDatos = [[''] * 6 for j in range(8)]
+    arrayMotivos = [''] * 25 
+    arrayReporte = [[''] * 3 for n in range(25)]
     # Login 
     print() 
     logOReg = 1
@@ -489,69 +577,102 @@ def principal():
         elif logOReg == 1:    
             cantidadDeEstudiantesCargados = contarEstudiantes(arrayUsuarios)
             cantidadDeModeradoresCargados = contarModeradores(arrayUsuarios)
-            if cantidadDeEstudiantesCargados < 4 :
-                print('Para poder loguearte, necesitamos como minimo 4 estudiantes! ')
+            if cantidadDeEstudiantesCargados < 4 or cantidadDeModeradoresCargados < 1:
+                print('Para poder loguearte, necesitamos como minimo 4 estudiantes y 1 moderador! ')
                 print()
                 print('Volviendo a la pantalla de Log in. ')
-                os.system('pause')
-            elif cantidadDeModeradoresCargados < 1:
-                print('Para poder loguearte, necesitamos como minimo 1 moderador! ')
-                print()
-                print('Volviendo a la pantalla de Log in.')
                 os.system('pause')
             else:
                 matrizLikes = [[0] * cantidadDeEstudiantesCargados for n in range(cantidadDeEstudiantesCargados)]
                 cargaMatrizDeLikes(matrizLikes,cantidadDeEstudiantesCargados)
                 print('')
-                idDeEstudianteLogueado = logueo(arrayUsuarios)
-                if idDeEstudianteLogueado != -1 :   
-                    arrayReporte = [[''] * 3 for n in range(25)]
-                    if arrayUsuarios[idDeEstudianteLogueado][3] == 'Moderador':
-                        segundaOpcion = 1
-                        while segundaOpcion != 0:
-                            menuPrincipalModeradores()
-                            eleccion = int(input('Elige una opcion (0,1,2,3): '))
-                            while eleccion not in range(4):
-                                print('Opcion Invalida!')
-                                eleccion = int(input('Elige una opcion (0,1,2,3): '))
-                            match eleccion:
-                                case 1: gestionarUsuarios(arrayUsuarios)
-                                case 2: gestionarReportes(arrayReporte) 
-                                case 3: enConstruccion()
-                                case 0: 
-                                    print('Volviendo al menu de logueo!')
-                                    os.system('pause')    
-                    else:
-                        segundaOpcion = 1
-                        while segundaOpcion != 0 and arrayUsuarios[idDeEstudianteLogueado][2] == 'Activo':       
-                            menuPrincipalEstudiante()
-                            segundaOpcion = int(input('Elige una opcion (0,1,2,3,4)'))
-                            while segundaOpcion != 0 and segundaOpcion != 1 and segundaOpcion != 2 and segundaOpcion != 3 and segundaOpcion != 4:
-                                print('Error! Opcion invalida. ')
-                                segundaOpcion = int(input('Elige una opcion (0,1,2,3,4)'))
-                            match segundaOpcion:
-                                case 1: gestionarPerfil(idDeEstudianteLogueado,arrayDatos,arrayUsuarios)
-                                case 2:
-                                    arrayMotivos = [''] * 25 
-                                    gestionarCandidatos(cantidadDeEstudiantesCargados,arrayDatos,arrayUsuarios,idDeEstudianteLogueado,arrayReporte,arrayMotivos)
-                                case 3: enConstruccion()
-                                case 4: reportesEstadisticos(matrizLikes,idDeEstudianteLogueado,cantidadDeEstudiantesCargados)
-                                case 0: 
-                                    print('Volviendo al menu de logueo')  
-                                    os.system('pause')                
+                idDeUsuarioLogueado = logueo(arrayUsuarios)
+                if arrayUsuarios[idDeUsuarioLogueado][2] == 'Inactivo':
+                    print('Logueo invalido. Usuario Inactivo')
+                    print('Volviendo al menu de Logueo...')
+                    input()
                 else:
-                    print('Te has quedado sin intentos! ')
-                    print('Vuelve mas tarde! ')
-                    print('Adios!')
+                    if idDeUsuarioLogueado != -1 :   
+                        if arrayUsuarios[idDeUsuarioLogueado][3] == 'Moderador':
+                            segundaOpcion = 1
+                            while segundaOpcion != 0:
+                                menuPrincipalModeradores()
+                                segundaOpcion = int(input('Elige una opcion (0,1,2,3): '))
+                                while segundaOpcion not in range(4):
+                                    print('Opcion Invalida!')
+                                    segundaOpcion = int(input('Elige una opcion (0,1,2,3): '))
+                                match segundaOpcion:
+                                    case 1: gestionarUsuarios(arrayUsuarios,idDeUsuarioLogueado)
+                                    case 2: gestionarReportes(arrayUsuarios,arrayReporte,arrayMotivos) 
+                                    case 3: enConstruccion()
+                                    case 0: 
+                                        print('Volviendo al menu de logueo!')
+                                        os.system('pause')    
+                        else:
+                            segundaOpcion = 1
+                            while segundaOpcion != 0 and arrayUsuarios[idDeUsuarioLogueado][2] == 'Activo':       
+                                menuPrincipalEstudiante()
+                                segundaOpcion = int(input('Elige una opcion (0,1,2,3,4)'))
+                                while segundaOpcion != 0 and segundaOpcion != 1 and segundaOpcion != 2 and segundaOpcion != 3 and segundaOpcion != 4:
+                                    print('Error! Opcion invalida. ')
+                                    segundaOpcion = int(input('Elige una opcion (0,1,2,3,4)'))
+                                match segundaOpcion:
+                                    case 1: gestionarPerfil(idDeUsuarioLogueado,arrayDatos,arrayUsuarios)
+                                    case 2:
+                                        gestionarCandidatos(cantidadDeEstudiantesCargados,arrayDatos,arrayUsuarios,idDeUsuarioLogueado,arrayReporte,arrayMotivos)
+                                    case 3: enConstruccion()
+                                    case 4: reportesEstadisticos(matrizLikes,idDeUsuarioLogueado,cantidadDeEstudiantesCargados)
+                                    case 0: 
+                                        print('Volviendo al menu de logueo')  
+                                        os.system('pause')                
+                    else:
+                        print('Te has quedado sin intentos! ')
+                        print('Vuelve mas tarde! ')
+                        print('Adios!')
         else:
-            print('Terminando Programa...')
-            os.system('pause')
+            print('Antes de terminar, Deseas hacer el BonusTrack 2? ')
+            auxiliar = input('Responde si o no: ').lower()
+            while auxiliar != 'si' and auxiliar != 'no':
+                auxiliar = input('Responde si o no: ').lower()
+            if auxiliar == 'si':
+                cantidadDeMatcheosPosibles = cantidadDeEstudiantesCargados * (cantidadDeEstudiantesCargados - 1)
+                print('La cantida de matcheos combinados, independientemente del sexo, es de: ',cantidadDeMatcheosPosibles)   
+            print('Hasta aqui hemos llegado. Hasta la proxima!!!')
+                             
+                
+            
 principal()
             
    
-   
+
+def ordenarArray(array,longitudArray):
+    for i in range(longitudArray - 1):
+        for j in range(i + 1,longitudArray):
+            if array[j] > array [i]:
+                aux = array[i]
+                array[i] = array[j]
+                array[j] = aux
+
+
+def busquedaDeHuecos(array,longitudDelArray):
+    i = 0
+    while array[i] - array[i + 1] == 1  or i == longitudDelArray:
+        i += 1
+    if array[i + 1] - array[i] != 1:
+        print('Hay un hueco entre las edades ',array[i], ' y ',array[i + 1])
+    else:
+        print('no hay huecos! ')
         
-        
+def bonusTrack1():
+    edades = [21,18,20,19,23,24]
+    ordenarArray(edades,6)
+    print(edades)
+    busquedaDeHuecos(edades,6)
+
+# bonusTrack1()
+
+    
+            
      
         
 
