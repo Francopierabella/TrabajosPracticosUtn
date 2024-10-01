@@ -364,7 +364,7 @@ def mostrarOpcionesDeMatcheos():
     print()
     print('b. Eliminar un matcheo')
     print()
-    print('c. Volver')   
+    print('c. Volver ')   
     
 # --------------------------------------------------------------------
 
@@ -392,7 +392,20 @@ def mostrarOpcionesDeGestionarUsuarios():
     print('                       GESTIONAR USUARIOS')
     print()
     print('a. Desactivar usuario')
-       
+    print()
+    print('b. Volver')
+
+
+def mostrarOpcionesDeGEstionarReportes():
+    os.system('cls')
+    print()
+    print('                       GESTIONAR REPORTES')
+    print()
+    print('a. Ver reportes')
+    print()
+    print('b. Volver')
+    
+           
     
 def main():
     # Antes de entrar al menu de logueo, debemos pre cargar un admi y un mod.
