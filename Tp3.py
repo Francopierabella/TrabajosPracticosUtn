@@ -57,21 +57,6 @@ class administrador:
         self.contraseña = ''
         
 
-def menuDeLogueo() -> None:
-    print('Bienvenido!')
-    print()
-    print()
-    print('------------------------------')
-    print()
-    print('MENU PRINCIPAL')
-    print('Ya tienes una cuenta => Logueate respondiendo 1!')
-    print('En caso contrario, creala respondiendo 2!')
-    print()
-    print('1. Log in')
-    print()
-    print('2. Registro (Estudiantes unicamente) ')
-    print()
-    print('0. Salir')
     
 def busquedaSecuencialDeId(vfa,vla,id) -> int:
     tamañoArchivo = os.path.getsize(vfa)
@@ -287,11 +272,7 @@ def logueo(varFisicaAdmi,varLogicaAdmi,varFisicaMods,varLogicaMods,varFisicaEst,
     if intentos == 0:
         print('Te has quedado sin intentos. Vuelve mas tarde! ')
     else:
-        # varLogicaAdmi.seek(0,0)
-        # varLogicaMods.seek(0,0)
-        # varLogicaEst.seek(0,0)
         if posEstudiante != -1:
-            print('ACA ANTES DE RETORNAR EL TIPO DE ESTUDIANTE, EL PUNTERO ESTA EN: ',varLogicaEst.tell() - devolvertamañoDeRegistro(varFisicaEst,varLogicaEst))
             tipo = 'e'
         elif posModeradores != -1:
             tipo = 'm'
@@ -308,6 +289,25 @@ def mostrarRegistros (vla,vfa) -> None:
             reg = pickle.load(vla)
             print('ID: ',reg.id.strip(), 'Nombre: ',reg.nombre.strip(),' Email: ',reg.email.strip(), ' Contraseña: ',reg.contraseña.strip())
     os.system('pause')
+    
+
+def menuDeLogueo() -> None:
+    print('Bienvenido!')
+    print()
+    print()
+    print('------------------------------')
+    print()
+    print('MENU PRINCIPAL')
+    print('Ya tienes una cuenta => Logueate respondiendo 1!')
+    print('En caso contrario, creala respondiendo 2!')
+    print()
+    print('1. Log in')
+    print()
+    print('2. Registro (Estudiantes unicamente) ')
+    print()
+    print('0. Salir')
+# --------------------------------------------------------------------
+# MENUS ESTUDIANTE 
 
 def menuPrincipalEstudiante() -> None:
     os.system('cls')
@@ -328,6 +328,71 @@ def menuPrincipalEstudiante() -> None:
     print()
     print('0. Salir:')  
     os.system('pause')
+    
+
+def MostrarOpcionesDeGestionarMiperfil():
+    os.system('cls')
+    print('                     GESTIONAR MI PERFIL ')
+    print()
+    print('------------------------------')
+    print()
+    print('a. Editar mis datos personales. ')
+    print()
+    print('b. Eliminar mi perfil. ')
+    print()
+    print('c. Volver')
+    print()
+    
+def mostrarOpcionesDeGestionarCandidatos():
+    os.system('cls') 
+    print('                     GESTIONAR CANDIDATOS')
+    print()
+    print('------------------------------')
+    print()
+    print('a. Ver candidatos ')
+    print()
+    print('b. Reportar un candidato. ')
+    print()
+    print('c. Volver') 
+    print()
+    
+def mostrarOpcionesDeMatcheos():
+    os.system('cls')
+    print('                       MATCHEOS ') 
+    print()
+    print('a. Ver matcheos')
+    print()
+    print('b. Eliminar un matcheo')
+    print()
+    print('c. Volver')   
+    
+# --------------------------------------------------------------------
+
+# --------------------------------------------------------------------
+# Menus MODERADORES
+
+def menuPrincipalModeradores():
+    os.system('cls')
+    print()
+    print('------------------------------')
+    print()
+    print('MENU PRINCIPAL')
+    print()
+    print('1. Gestionar Usuarios')
+    print()
+    print('2. Gestionar Reportes')
+    print()
+    print('3. Reportes Estadisticos')
+    print()
+    print('0. Volver')
+    
+def mostrarOpcionesDeGestionarUsuarios():
+    os.system('cls') 
+    print()
+    print('                       GESTIONAR USUARIOS')
+    print()
+    print('a. Desactivar usuario')
+       
     
 def main():
     # Antes de entrar al menu de logueo, debemos pre cargar un admi y un mod.
@@ -369,12 +434,13 @@ def main():
                     input()
                     # menuPrincipalEstudiante()
                 elif tipoDeUsuarioLogueado == 'm':
-                    posDelRegistroDelModeradorLogueado = variableDeArchivoLogicaModeradores.tell()
+                    posDelRegistroDelModeradorLogueado = variableDeArchivoLogicaModeradores.tell() - devolvertamañoDeRegistro(variableDeArchivoFisicoModeradores,variableDeArchivoLogicaModeradores)
                     print('Se logueo un Moderador! Su posicion en el registro es: ',posDelRegistroDelModeradorLogueado)
 
                     input()
                 elif tipoDeUsuarioLogueado == 'a':
-                    print('Se logueo el adminsitrador! ')
+                    posDelRegistroDelAdmintradorLogueado = variableDeArchivoLogicaAdministradores.tell() - devolvertamañoDeRegistro(variableDeArchivoFisicoAdministradores,variableDeArchivoLogicaAdministradores)
+                    print('Se logueo el adminsitrador! Su posicion en el registro es: ',posDelRegistroDelAdmintradorLogueado)
                     input()
                 else:
                     print('No se logueo nadie. Vuelve mas tarde')
