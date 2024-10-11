@@ -4,7 +4,6 @@ import pickle
 import msvcrt
 import sys
 from datetime import datetime
-from datetime import date
 
 '''
 
@@ -40,7 +39,7 @@ def getpass_custom(prompt='Password: '):
  
 # calcularEdad: str -> int
 # Recibe la fecha en formato date, la procesa y nos calcula la edad.               
-def calcularEdad(fecha) -> int:
+def calcularEdad(fecha : str) -> int:
     fechaAux = datetime.strptime(fecha.strip(),'%Y/%m/%d')
     año = fechaAux.year
     mes = fechaAux.month
@@ -97,7 +96,12 @@ class reportes:
   
 #------------------------------------------------------
 # FUNCIONES RELACIONADAS A BUSQUEDAS     
-def busquedaSecuencialDeIdEstudiantes(id) -> int:
+
+def busquedaSecuencialDeIdEstudiantes(id : int) -> int:
+    
+    # Var
+    # tamañoArchivo,pos : int
+    # variableDeRegistro : estudiante()
     tamañoArchivo = os.path.getsize(variableDeArchivoFisicoEstudiantes)
     pos = 0
     variableDeArchivoLogicaEstudiantes.seek(0,0)
@@ -108,8 +112,12 @@ def busquedaSecuencialDeIdEstudiantes(id) -> int:
     if variableDeRegistro.id.strip() == id.strip():
         return pos
     return -1
-
-def busquedaSecuencialDeIdModeradores(id) -> int:
+def busquedaSecuencialDeIdModeradores(id : int) -> int:
+    
+    
+    # Var
+    # tamañoArchivo,pos : int
+    # variableDeRegistro : moderador()
     tamañoArchivo = os.path.getsize(variableDeArchivoFisicoModeradores)
     pos = 0
     variableDeArchivoLogicaModeradores.seek(0,0)
@@ -120,7 +128,11 @@ def busquedaSecuencialDeIdModeradores(id) -> int:
     if variableDeRegistro.id.strip() == id.strip():
         return pos
     return -1
-def busquedaSecuencialDeNombre(nombre,pos):
+def busquedaSecuencialDeNombre(nombre: str,pos: int) -> int:
+    
+    # Var
+    # tamArchivoEstudiantes, aux : int
+    # r : estudiante()
     tamArchivoEstudiantes = os.path.getsize(variableDeArchivoFisicoEstudiantes)
     variableDeArchivoLogicaEstudiantes.seek(0,0)
     aux = 0 
@@ -131,8 +143,10 @@ def busquedaSecuencialDeNombre(nombre,pos):
     if r.nombre.strip() == nombre and aux != pos:
         return aux
     return -1  
-
-def busquedaSecuencialDeEmailEnArchivoEstudiantes(email) -> int:
+def busquedaSecuencialDeEmailEnArchivoEstudiantes(email : str) -> int:
+    # Var
+    # tamañoArchivo,pos : int
+    # variableDeRegistro : estudiante()
     tamañoArchivo = os.path.getsize(variableDeArchivoFisicoEstudiantes)
     if tamañoArchivo == 0:
         return -1
@@ -147,7 +161,10 @@ def busquedaSecuencialDeEmailEnArchivoEstudiantes(email) -> int:
             return pos
         return -1
 
-def busquedaSecuencialDeEmailEnArchivoModeradores(email) -> int:
+def busquedaSecuencialDeEmailEnArchivoModeradores(email : str) -> int:
+    # Var
+    # tamañoArchivo, pos : int
+    # variableDeRegistro : moderador()
     tamañoArchivo = os.path.getsize(variableDeArchivoFisicoModeradores)
     if tamañoArchivo == 0:
         return -1
@@ -162,7 +179,10 @@ def busquedaSecuencialDeEmailEnArchivoModeradores(email) -> int:
             return pos
         return -1
 
-def busquedaSecuencialDeEmailEnArchivoAdministradores(email) -> int:
+def busquedaSecuencialDeEmailEnArchivoAdministradores(email : str) -> int:
+    # Var
+    # tamañoArchivo, pos : int
+    # variableDeRegistro : administrador()
     tamañoArchivo = os.path.getsize(variableDeArchivoFisicoAdministradores)
     if tamañoArchivo == 0:
         return -1
@@ -179,6 +199,8 @@ def busquedaSecuencialDeEmailEnArchivoAdministradores(email) -> int:
 #------------------------------------------------------
 # FUNCIONES RELACIONADAS A CONTAR REGISTROS
 def contarEstudiantes() -> int:
+    # tamArchivo,tamRegistro,canRegistros : int
+    # vr : estudiante()
     variableDeArchivoLogicaEstudiantes.seek(0,0)
     tamArchivo = os.path.getsize(variableDeArchivoFisicoEstudiantes)
     if tamArchivo == 0: 
@@ -189,6 +211,8 @@ def contarEstudiantes() -> int:
     return cantRegistros
 
 def contarModeradores() -> int:
+    # tamArchivo,tamRegistro,canRegistros : int
+    # vr : moderador()
     variableDeArchivoLogicaModeradores.seek(0,0)
     tamArchivo = os.path.getsize(variableDeArchivoFisicoModeradores)
     if tamArchivo == 0: 
@@ -199,6 +223,8 @@ def contarModeradores() -> int:
     return cantRegistros
 
 def contarAdministradores() -> int:
+    # tamArchivo,tamRegistro,canRegistros : int
+    # vr : administrador()
     variableDeArchivoLogicaAdministradores.seek(0,0)
     tamArchivo = os.path.getsize(variableDeArchivoFisicoAdministradores)
     if tamArchivo == 0: 
@@ -209,6 +235,9 @@ def contarAdministradores() -> int:
     return cantRegistros
 
 def contarReportes():
+    # Var
+    # t,cont : int
+    # r: reporte()
     t = os.path.getsize(variableDeArchivoFisicoReportes)
     cont = 0
     variableLogicaDeArchivoReportes.seek(0,0)
@@ -219,7 +248,7 @@ def contarReportes():
 #------------------------------------------------------
 # FUNCIONES PARA FORMATEAR LOS REGISTROS
 
-def formatearEstudiantes(variableDeRegistro):
+def formatearEstudiantes(variableDeRegistro : estudiante):
     variableDeRegistro.id = str(variableDeRegistro.id).ljust(5,' ')
     variableDeRegistro.email = str(variableDeRegistro.email).ljust(32,' ')
     variableDeRegistro.nombre = str(variableDeRegistro.nombre).ljust(32,' ')
@@ -236,7 +265,7 @@ def formatearEstudiantes(variableDeRegistro):
     variableDeRegistro.datosPersonales[7] = str(variableDeRegistro.datosPersonales[7]).ljust(32,' ')
     variableDeRegistro.datosPersonales[8] = str(variableDeRegistro.datosPersonales[8]).ljust(10,' ')
     
-def formatearMods(variableDeRegistro):
+def formatearMods(variableDeRegistro : moderador):
     variableDeRegistro.id = str(variableDeRegistro.id).ljust(3,' ')
     variableDeRegistro.email = str(variableDeRegistro.email).ljust(32,' ')
     variableDeRegistro.contraseña = str(variableDeRegistro.contraseña).ljust(32,' ')
@@ -244,16 +273,16 @@ def formatearMods(variableDeRegistro):
     variableDeRegistro.cantReportesIgnorados = str(variableDeRegistro.cantReportesIgnorados).ljust(2,' ')
     variableDeRegistro.cantReportesBloqueados = str(variableDeRegistro.cantReportesBloqueados).ljust(2,' ')
 
-def formatearAdmins(variableDeRegistro):
+def formatearAdmins(variableDeRegistro : administrador):
     variableDeRegistro.id = str(variableDeRegistro.id).ljust(3,' ')
     variableDeRegistro.email = str(variableDeRegistro.email).ljust(32,' ')
     variableDeRegistro.contraseña = str(variableDeRegistro.contraseña).ljust(32,' ')
 
-def formatearLikes(variableDeRegistro):
+def formatearLikes(variableDeRegistro : likes):
     variableDeRegistro.remitente = str(variableDeRegistro.remitente).ljust(3,' ')
     variableDeRegistro.destinatario = str(variableDeRegistro.destinatario).ljust(3,' ')
     
-def formatearReportes(variableDeRegistro):
+def formatearReportes(variableDeRegistro : reportes):
     variableDeRegistro.id_reportante = str (variableDeRegistro.id_reportante).ljust(3,' ')
     variableDeRegistro.id_reportado = str (variableDeRegistro.id_reportado).ljust(3,' ')   
     variableDeRegistro.razon_reporte = str(variableDeRegistro.razon_reporte).ljust(255,' ')
@@ -282,10 +311,10 @@ def altaAdmins() -> None:
     os.system('pause')  
 
 def altaModerador() -> None: 
-    # os.system('cls')
-    print('Hola Moderador!')
+    os.system('cls')
+    print('Hola Administrador!')
     print()
-    print('Carga aqui tus datos !')
+    print('Carga aqui los datos del moderador! Ten en cuenta que su id es un numero auto-Incremental')
     print()
     variableDeArchivoLogicaModeradores.seek(0,2)
     variableDeRegistroMods = moderador()
@@ -297,13 +326,12 @@ def altaModerador() -> None:
                     print('Ese email ya esta en uso! Intenta de nuevo. ')
                     variableDeRegistroMods.email = input('Ingrese su email: ')
     variableDeRegistroMods.contraseña = getpass_custom('Ingrese su contraseña: ')
-    variableDeRegistroMods.estado = True if variableDeArchivoLogicaModeradores.tell() == 0 else False
+    variableDeRegistroMods.estado = True
     variableDeRegistroMods.cantReportesIgnorados = 0
     variableDeRegistroMods.cantReportesBloqueados = 0
     formatearMods(variableDeRegistroMods)
     pickle.dump(variableDeRegistroMods,variableDeArchivoLogicaModeradores)
     variableDeArchivoLogicaModeradores.flush()
-    os.system('pause')
      
 def altaEstudiantes() -> None:
     # os.system('cls')
@@ -354,7 +382,7 @@ def altaEstudiantes() -> None:
     variableDeArchivoLogicaEstudiantes.flush()
     os.system('pause')
 
-def altaLikes(idRemitente,idDestinatario):
+def altaLikes(idRemitente : str,idDestinatario : str):
     variableDeArchivoLogicaLikes.seek(0,2)
     variableDeRegistroLikes = likes()
     variableDeRegistroLikes.remitente = idRemitente
@@ -364,7 +392,7 @@ def altaLikes(idRemitente,idDestinatario):
     variableDeArchivoLogicaLikes.flush()
     print('Like dado de alta correctamente. ')
 
-def altaReportes(idReportante,idReportado):
+def altaReportes(idReportante : str,idReportado : str):
     variableLogicaDeArchivoReportes.seek(0,2)
     variableDeRegistro = reportes()
     variableDeRegistro.id_reportante = idReportante
@@ -379,13 +407,13 @@ def altaReportes(idReportante,idReportado):
     print(' ')
     print('ID REPORTANTE: ',idReportante)
     print('ID REPORTADO: ', idReportado)
-    print('MOTIVO DE REPORTE: ',variableDeRegistro.razon_reporte)
+    print('MOTIVO DE REPORTE: ',variableDeRegistro.razon_reporte.strip())
     print('ESTADO DEL REPORTE: ',variableDeRegistro.estado)
 
 #------------------------------------------------------
 # FUNCIONES REFERIDAS A LOS LIKES    
 # LO QUE HACE EL .strip() es sacar los espacios en blanco dados por el formateo   
-def leDioLike(idRemitente,idDestinatario):
+def leDioLike(idRemitente : str,idDestinatario : str) -> int:
     tamArchivoLikes = os.path.getsize(variableDeArchivoFisicoLikes)
     variableDeArchivoLogicaLikes.seek(0,0)
     while variableDeArchivoLogicaLikes.tell() < tamArchivoLikes:
@@ -394,13 +422,12 @@ def leDioLike(idRemitente,idDestinatario):
             return 1
     return 0
         
-    
-def likesCorrespondidos(idRemitente,idDestinatario):
+def likesCorrespondidos(idRemitente : str,idDestinatario : str) -> int:
     if leDioLike(idRemitente,idDestinatario) == 1 and leDioLike(idDestinatario,idRemitente) == 1:
         return 1
     return 0
 
-def porcentajeDeLikesDadosYRecibidos(idRemitente):
+def porcentajeDeLikesDadosYRecibidos(idRemitente : str) -> int:
     tamArchivoLikes = os.path.getsize(variableDeArchivoFisicoLikes)
     variableDeArchivoLogicaLikes.seek(0,0)
     vr = pickle.load(variableDeArchivoLogicaLikes)
@@ -414,7 +441,7 @@ def porcentajeDeLikesDadosYRecibidos(idRemitente):
     porcentajeDeLikesDadosYRecibidos = cantDeLikesDadosYRecibidos * 100 // contarEstudiantes()
     return porcentajeDeLikesDadosYRecibidos
 
-def likeDadoYNoRecibido(idRemitente):
+def likeDadoYNoRecibido(idRemitente : str)-> int:
     tamArchivoLikes = os.path.getsize(variableDeArchivoFisicoLikes)
     variableDeArchivoLogicaLikes.seek(0,0)
     vr = pickle.load(variableDeArchivoLogicaLikes)
@@ -427,7 +454,7 @@ def likeDadoYNoRecibido(idRemitente):
                 cantDeLikesDadosYNoRecibidos += 1
     return cantDeLikesDadosYNoRecibidos
     
-def likeRecibidioYNoRespondido(idRemitente):
+def likeRecibidioYNoRespondido(idRemitente : str)-> int:
     tamArchivoLikes = os.path.getsize(variableDeArchivoFisicoLikes)
     variableDeArchivoLogicaLikes.seek(0,0)
     vr = pickle.load(variableDeArchivoLogicaLikes)
@@ -443,7 +470,7 @@ def likeRecibidioYNoRespondido(idRemitente):
 #------------------------------------------------------
 # FUNCIONES PARA CHEQUEAR LOGUEO CORRECTO    
     
-def chequearContraseñaDeEmailIngresadoEnArchivoEstudiantes(contraseña,pos) -> int:
+def chequearContraseñaDeEmailIngresadoEnArchivoEstudiantes(contraseña : str,pos : int) -> int:
     if pos != -1:
         variableDeArchivoLogicaEstudiantes.seek(pos,0)
         variableDeRegistro = pickle.load(variableDeArchivoLogicaEstudiantes)
@@ -454,7 +481,7 @@ def chequearContraseñaDeEmailIngresadoEnArchivoEstudiantes(contraseña,pos) -> 
                     print('Usuario INACTIVO => Logueo Invalido ')
     return 0
 
-def chequearContraseñaDeEmailIngresadoEnArchivoModeradores(contraseña,pos) -> int:
+def chequearContraseñaDeEmailIngresadoEnArchivoModeradores(contraseña : str,pos : int) -> int:
     if pos != -1:
         variableDeArchivoLogicaModeradores.seek(pos,0)
         variableDeRegistro = pickle.load(variableDeArchivoLogicaModeradores)
@@ -465,7 +492,7 @@ def chequearContraseñaDeEmailIngresadoEnArchivoModeradores(contraseña,pos) -> 
                     print('Usuario INACTIVO => Logueo Invalido ')
     return 0
 
-def chequearContraseñaDeEmailIngresadoEnArchivoAdministradores(contraseña,pos) -> int:
+def chequearContraseñaDeEmailIngresadoEnArchivoAdministradores(contraseña : str,pos : int) -> int:
     if pos != -1:
         variableDeArchivoLogicaAdministradores.seek(pos,0)
         variableDeRegistro = pickle.load(variableDeArchivoLogicaAdministradores)
@@ -478,11 +505,11 @@ def logueo() -> str:
     print()
     intentos = 3
     emailIngresado = input('Ingresa tu email: ')
-    contraseñaIngresada = getpass_custom('Ingresa tu contrasaña: ')
+    contraseñaIngresada = getpass_custom('Ingresa tu contraseña: ')
     tipo = ''
     posEstudiante = busquedaSecuencialDeEmailEnArchivoEstudiantes(emailIngresado)
     posModeradores = busquedaSecuencialDeEmailEnArchivoModeradores(emailIngresado)
-    posAdministradores = busquedaSecuencialDeEmailEnArchivoModeradores(emailIngresado)    
+    posAdministradores = busquedaSecuencialDeEmailEnArchivoAdministradores(emailIngresado)    
     while  (posEstudiante == -1 or chequearContraseñaDeEmailIngresadoEnArchivoEstudiantes(contraseñaIngresada,posEstudiante) == 0) and \
             (posModeradores == -1 or chequearContraseñaDeEmailIngresadoEnArchivoModeradores(contraseñaIngresada,posModeradores) == 0) and \
                 (posAdministradores == -1 or chequearContraseñaDeEmailIngresadoEnArchivoAdministradores(contraseñaIngresada,posAdministradores) == 0) \
@@ -512,7 +539,7 @@ def logueo() -> str:
     return tipo
 #------------------------------------------------------
 # FUNCIONES PARA SABER EL TAMÑAÑO DE LOS REGISTROS
-def devolvertamañoDeRegistroDeArchivoEstudiantes():
+def devolvertamañoDeRegistroDeArchivoEstudiantes() -> int:
     if os.path.getsize(variableDeArchivoFisicoEstudiantes) == 0:
         return 0
     aux = variableDeArchivoLogicaEstudiantes.tell()
@@ -522,7 +549,7 @@ def devolvertamañoDeRegistroDeArchivoEstudiantes():
     variableDeArchivoLogicaEstudiantes.seek(aux,0)
     return tamaño
 
-def devolvertamañoDeRegistroDeArchivoModeradores():
+def devolvertamañoDeRegistroDeArchivoModeradores() -> int:
     if os.path.getsize(variableDeArchivoFisicoModeradores) == 0:
         return 0
     aux = variableDeArchivoLogicaModeradores.tell()
@@ -532,7 +559,7 @@ def devolvertamañoDeRegistroDeArchivoModeradores():
     variableDeArchivoLogicaModeradores.seek(aux,0)
     return tamaño
 
-def devolvertamañoDeRegistroDeArchivoAdministradores():
+def devolvertamañoDeRegistroDeArchivoAdministradores() -> int:
     if os.path.getsize(variableDeArchivoFisicoAdministradores) == 0:
         return 0
     aux = variableDeArchivoLogicaAdministradores.tell()
@@ -542,7 +569,7 @@ def devolvertamañoDeRegistroDeArchivoAdministradores():
     variableDeArchivoLogicaAdministradores.seek(aux,0)
     return tamaño
 
-def devolverTamañoDeRegistroDeArchivoReportes():
+def devolverTamañoDeRegistroDeArchivoReportes() -> int:
     if os.path.getsize(variableDeArchivoFisicoReportes) == 0:
         return 0
     aux = variableLogicaDeArchivoReportes.tell()
@@ -553,7 +580,7 @@ def devolverTamañoDeRegistroDeArchivoReportes():
     return tamaño
 #------------------------------------------------------
 # FUNCIONES PARA MOSTRAR ESTUDIANTES O REPORTES (PUEDEN SER BORRADAS SI SE QUIERE)
-def mostrarRegistros () -> None:
+def mostrarRegistros ():
     tamEst = os.path.getsize(variableDeArchivoFisicoEstudiantes)
     if tamEst != 0:
         variableDeArchivoLogicaEstudiantes.seek(0,0)
@@ -571,9 +598,8 @@ def mostrarReportes():
             print('ID REPORTANTE: ',r.id_reportante, 'ID REPORTADO: ', r.id_reportado, 'RAZON REPORTE: ',r.razon_reporte.strip(),'ESTADO REPORTE: ',r.estado)
 #------------------------------------------------------
 #                                         FUNCIONES REFERIDAS A MENUS    
-
 # MENU PRINCIPAL DE LOGUEO
-def menuDeLogueo() -> None:
+def menuDeLogueo():
     print('Bienvenido!')
     print()
     print()
@@ -590,7 +616,7 @@ def menuDeLogueo() -> None:
     print('0. Salir')
 # --------------------------------------------------------------------
 # TODO LO DE ESTUDIANTES, INCLUYENDO MENUS Y FUNCIONES 
-def menuPrincipalEstudiante() -> None:
+def menuPrincipalEstudiante():
     os.system('cls')
     print()
     print()
@@ -608,7 +634,6 @@ def menuPrincipalEstudiante() -> None:
     print('4. Reportes estadisticos ')
     print()
     print('0. Salir:')  
-    os.system('pause')
     
 def MostrarOpcionesDeGestionarMiperfil():
     os.system('cls')
@@ -623,7 +648,7 @@ def MostrarOpcionesDeGestionarMiperfil():
     print('c. Volver')
     print()
     
-def imprimirOpcionesACambiar(registro):
+def imprimirOpcionesACambiar(registro : estudiante):
     os.system('cls')
     print('Estos son tus datos Actuales: \n')
     print('Tus hobbies: ',registro.datosPersonales[0])
@@ -638,7 +663,7 @@ def imprimirOpcionesACambiar(registro):
     print('4. Ciudad ')
     print('0. Volver')
     
-def eliminarPerfilEstudiantes(pos):
+def eliminarPerfilEstudiantes(pos : int):
     variableDeArchivoLogicaEstudiantes.seek(pos,0)
     registro = pickle.load(variableDeArchivoLogicaEstudiantes)
     print('ATENCION')
@@ -655,7 +680,7 @@ def eliminarPerfilEstudiantes(pos):
         print('Decidiste no eliminar el perfil! ')
     os.system('pause')
    
-def gestionarMiPerfil(pos):
+def gestionarMiPerfil(pos : int):
     os.system('cls')
     MostrarOpcionesDeGestionarMiperfil()
     op = input('Elige una opcion: ')
@@ -737,7 +762,7 @@ def mostrarOpcionesDeGestionarCandidatos():
     print('c. Volver') 
     print()
     
-def verCandidatos(pos):
+def verCandidatos(pos : int):
     tamArchivoEstudiantes = os.path.getsize(variableDeArchivoFisicoEstudiantes)
     print('VER CANDIDATOS')
     print()
@@ -767,44 +792,23 @@ def verCandidatos(pos):
     vrDestinatario = pickle.load(variableDeArchivoLogicaEstudiantes)
     altaLikes(vrRemitente.id,vrDestinatario.id)
 
-def reportarUnCandidato(pos):
+def reportarUnCandidato(pos : int):
     variableDeArchivoLogicaEstudiantes.seek(pos,0)
     vr = pickle.load(variableDeArchivoLogicaEstudiantes)
     idReportante = vr.id
-    print('A continuacion, deberas ingresar el id o nombre de usuario del estudiante que quieras reportar. ')
-    print('Elige el tipo de busqueda: ')
-    print()
-    print('a. Busqueda por ID.')     
-    print()
-    print('b. Busqueda por nombre de usuario (email). ')
-    op = input('Ingresa la opcion elegida: ')
-    while op != 'a' and op != 'b':
-        print('Opcion invalida. Intenta de nuevo')        
-        op = input('Ingresa la opcion elegida: ')
-    if op == 'a':
+    print('A continuacion, deberas ingresar el id del estudiante que quieras reportar. ')
+    idReportado = input('Ingresa el id del estudiante a reportar: ')
+    while idReportado == idReportante.strip():
+        print('No puedes reportarte a ti mismo! Intenta de nuevo. ')
+        idReportado = input('Ingresa el id del estudiante a reportar: ')  
+    posDelIdReportado = busquedaSecuencialDeIdEstudiantes(idReportado)
+    while posDelIdReportado == -1 :
+        print('El id ingresado no esta en el sistema. Intenta de nuevo. ')
         idReportado = input('Ingresa el id del estudiante a reportar: ')
-        while idReportado == idReportante:
-            print('No puedes reportarte a ti mismo! Intenta de nuevo. ')
-            idReportado = input('Ingresa el id del estudiante a reportar: ')  
         posDelIdReportado = busquedaSecuencialDeIdEstudiantes(idReportado)
-        print(posDelIdReportado)
-        while posDelIdReportado == -1 :
-            print('El id ingresado no esta en el sistema. Intenta de nuevo. ')
-            idReportado = input('Ingresa el id del estudiante a reportar: ')
-            posDelIdReportado = busquedaSecuencialDeIdEstudiantes(idReportado)
-    elif op == 'a':
-        idReportado = input('Ingresa el id del estudiante a reportar: ')
-        while idReportado == idReportante:
-            print('No puedes reportarte a ti mismo! Intenta de nuevo. ')
-            idReportado = input('Ingresa el id del estudiante a reportar: ')   
-        posDelIdReportado = busquedaSecuencialDeEmailEnArchivoEstudiantes(idReportado)
-        while posDelIdReportado == -1:
-            print('El id ingresado no esta en el sistema. Intenta de nuevo. ')
-            idReportado = input('Ingresa el id del estudiante a reportar: ')
-            posDelIdReportado = busquedaSecuencialDeEmailEnArchivoEstudiantes(idReportado)
     altaReportes(idReportante,idReportado)
                  
-def gestionarCandidatos(pos):
+def gestionarCandidatos(pos : int):
     mostrarOpcionesDeGestionarCandidatos()
     op = input('Elige una opcion: ').lower()
     while op != 'a' and op != 'b' and op != 'c':
@@ -818,19 +822,9 @@ def gestionarCandidatos(pos):
         print('Volviendo al menu anterior... ')
     os.system('pause')
 
-def mostrarOpcionesDeMatcheos():
-    os.system('cls')
-    print('                       MATCHEOS ') 
-    print()
-    print('a. Ver matcheos')
-    print()
-    print('b. Eliminar un matcheo')
-    print()
-    print('c. Volver ')   
-
 def matcheos():
     os.system('cls')
-    print('                       MATCHEOS')
+    print('MATCHEOS')
     print()
     print('a. Ver matcheos ')
     print()
@@ -849,7 +843,7 @@ def matcheos():
         print('Volviendo al menu anterior...')
     os.system('pause')
                  
-def reportesEstadisticos(pos):
+def reportesEstadisticos(pos : int):
     os.system('cls')
     tam = os.path.getsize(variableDeArchivoFisicoLikes)
     variableDeArchivoLogicaLikes.seek(0,0)
@@ -889,15 +883,6 @@ def menuPrincipalModeradores():
     print('3. Reportes Estadisticos')
     print()
     print('0. Volver')
-    
-def mostrarOpcionesDeGestionarUsuarios():
-    os.system('cls') 
-    print()
-    print('                       GESTIONAR USUARIOS')
-    print()
-    print('a. Desactivar usuario')
-    print()
-    print('b. Volver')
 
 def gestionarUsuarios():
     os.system('cls')
@@ -919,17 +904,17 @@ def gestionarUsuarios():
     else:
         print('Volviendo al menu anterior...')
 
-def mostrarOpcionesDeGEstionarReportes():
+
     os.system('cls')
     print()
     print('                       GESTIONAR REPORTES')
     print()
     print('a. Ver reportes')
     print()
-    print('b. Volver')
-    
+    print('b. Volver')    
+
 # Esta funcion la ponemos aca y no arriba donde estan todas las de contar porque es una funcion especifica de verReportes
-def contarReportesPosibles():
+def contarReportesPosibles() -> int:
     t = os.path.getsize(variableDeArchivoFisicoReportes)
     variableLogicaDeArchivoReportes.seek(0,0)
     cont = 0
@@ -945,8 +930,7 @@ def contarReportesPosibles():
             cont += 1
     return cont
         
-
-def verReportes(posMod):
+def verReportes(posMod  : int):
     os.system('cls')
     if contarReportesPosibles() == 0:
         print('No hay reportes posibles para proceder. ')
@@ -955,8 +939,9 @@ def verReportes(posMod):
         mostrarReportes()
         variableDeArchivoLogicaEstudiantes.seek(0,0)
         variableLogicaDeArchivoReportes.seek(0,0)
-        i = 0
-        while variableLogicaDeArchivoReportes.tell() < tamArchivoReportes:
+        sigueViendoReportes = True
+        while variableLogicaDeArchivoReportes.tell() < tamArchivoReportes and sigueViendoReportes:
+            i = variableLogicaDeArchivoReportes.tell()
             reporte = pickle.load(variableLogicaDeArchivoReportes)
             posRegistroReportante = busquedaSecuencialDeIdEstudiantes(reporte.id_reportante.strip())
             posRegistroReportado = busquedaSecuencialDeIdEstudiantes(reporte.id_reportado.strip())
@@ -978,8 +963,9 @@ def verReportes(posMod):
                 print()
                 print('2. Bloquear al reportante')
                 print()
+                print('0. Volver')
                 op = input('Elige una opcion: ')
-                while op != '1' and op != '2':
+                while op != '1' and op != '2' and op != '0':
                     print('Opcion invalida! Intenta de nuevo ')
                     op = input('Elige una opcion: ')
                 if op == '1':
@@ -988,23 +974,40 @@ def verReportes(posMod):
                     if posMod % devolvertamañoDeRegistroDeArchivoModeradores() == 0:         
                         variableDeArchivoLogicaModeradores.seek(posMod,0)
                         r = pickle.load(variableDeArchivoLogicaModeradores)
-                        r.cantReportesIgnorados = str(int(r.cantReportesIgnorados) + 1)
-                else:
+                        r.cantReportesIgnorados = str(int(r.cantReportesIgnorados.strip()) + 1)
+                        formatearMods(r)
+                        pickle.dump(r,variableDeArchivoLogicaModeradores)
+                        variableDeArchivoLogicaModeradores.flush()
+                    print(variableLogicaDeArchivoReportes.tell())
+                    formatearReportes(reporte)
+                    variableLogicaDeArchivoReportes.seek(i,0)
+                    pickle.dump(reporte,variableLogicaDeArchivoReportes)
+                    print(variableLogicaDeArchivoReportes.tell())
+                    variableLogicaDeArchivoReportes.flush()
+                elif op == '2':
                     reporte.estado = 1
                     registroReportado.estado = 'False'
                     print('El reportado ha sido bloqueado. ')
-                    if posMod % devolvertamañoDeRegistroDeArchivoModeradores() == 0:         
+                    if posMod % devolvertamañoDeRegistroDeArchivoModeradores() == 0: # Esto se aplica solo cuando los moderadores ingresan.          
                         variableDeArchivoLogicaModeradores.seek(posMod,0)
                         r = pickle.load(variableDeArchivoLogicaModeradores)
-                        r.cantReportesBloqueados = str(int(r.cantReportesBloqueados) + 1)
-                variableLogicaDeArchivoReportes.seek(i * devolverTamañoDeRegistroDeArchivoReportes(),0)
-                pickle.dump(reporte,variableLogicaDeArchivoReportes)
-                variableLogicaDeArchivoReportes.flush()
-                i += 1
+                        r.cantReportesBloqueados = str(int(r.cantReportesBloqueados.strip()) + 1)
+                        formatearMods(r)
+                        pickle.dump(r,variableDeArchivoLogicaModeradores)
+                        variableDeArchivoLogicaModeradores.flush()
+                    print(variableLogicaDeArchivoReportes.tell())
+                    formatearReportes(reporte)
+                    variableLogicaDeArchivoReportes.seek(i,0)
+                    pickle.dump(reporte,variableLogicaDeArchivoReportes)
+                    print(variableLogicaDeArchivoReportes.tell())
+                    variableLogicaDeArchivoReportes.flush()
+                else:
+                    sigueViendoReportes = False 
+                
     print('Volviendo al menu anterior ')
     os.system('pause')
     
-def gestionarReportes(pos):
+def gestionarReportes(pos : int):
     os.system('cls')
     print() 
     print('a. Ver reportes ') 
@@ -1020,7 +1023,6 @@ def gestionarReportes(pos):
         print('Volviendo al menu anterior ')
         os.system('pause')   
  # --------------------------------------------------------------------
-
 # --------------------------------------------------------------------
 # Menus ADMINISTRADORES        
 
@@ -1053,7 +1055,7 @@ def mostrarOpcionesGestionarUsuariosSiendoAdmi():
     print()
     print('d. Volver')
 
-def eliminarPerfilMods(pos):
+def eliminarPerfilMods(pos : int):
     variableDeArchivoLogicaModeradores.seek(pos,0)
     registro = pickle.load(variableDeArchivoLogicaModeradores)
     print('ATENCION')
@@ -1114,7 +1116,7 @@ def gestionarUsuariosSiendoAdmi():
     print('Volviendo al menu anterior')
     os.system('pause')
     
-def reportesIgnorados():
+def reportesIgnorados() -> int:
     t = os.path.getsize(variableDeArchivoFisicoReportes)
     cont = 0
     variableLogicaDeArchivoReportes.seek(0,0)
@@ -1124,7 +1126,7 @@ def reportesIgnorados():
             cont += 1
     return cont
 
-def reportesAceptados():
+def reportesAceptados() -> int:
     t = os.path.getsize(variableDeArchivoFisicoReportes)
     cont = 0
     variableLogicaDeArchivoReportes.seek(0,0)
@@ -1134,7 +1136,7 @@ def reportesAceptados():
             cont += 1
     return cont
 
-def moderadorQueMasReportesIgnoro():
+def moderadorQueMasReportesIgnoro() -> int:
     t = os.path.getsize(variableDeArchivoFisicoModeradores)
     posDelQueMasIgnoro = 0
     cantDelQueMasIgnoro = 0
@@ -1146,68 +1148,171 @@ def moderadorQueMasReportesIgnoro():
             cantDelQueMasIgnoro = int(r.cantReportesIgnorados)
     return posDelQueMasIgnoro
 
-def moderadorQueMasReportesBloqueo():
+def moderadorQueMasReportesBloqueo() -> int:
     t = os.path.getsize(variableDeArchivoFisicoModeradores)
     posDelQueMasBloqueo = 0
     cantDelQueMasBloqueo = 0
     variableDeArchivoLogicaModeradores.seek(0,0)
     while variableLogicaDeArchivoReportes.tell() < t:
         r = pickle.load(variableDeArchivoLogicaModeradores)
-        if int(r.cantReportesBloqueados) > cantDelQueMasBloqueo:
+        if int(r.cantReportesBloqueados.strip()) > cantDelQueMasBloqueo:
             posDelQueMasBloqueo = variableDeArchivoLogicaModeradores.tell()
-            cantDelQueMasBloqueo = int(r.cantReportesBloqueados)
+            cantDelQueMasBloqueo = int(r.cantReportesBloqueados.strip())
     return posDelQueMasBloqueo
 
-def moderadorQueMasReportesProceso():
+def moderadorQueMasReportesProceso() -> int:
     t = os.path.getsize(variableDeArchivoFisicoModeradores)
     posDelQueMasProceso = 0
     cantDelQueMasProceso = 0
     variableDeArchivoLogicaModeradores.seek(0,0)
     while variableDeArchivoLogicaModeradores.tell() < t:
         r = pickle.load(variableDeArchivoLogicaModeradores)
-        sumaDeReportesProcesados = int(r.cantReportesIgnorados) + int(r.cantReportesBloqueados)
+        sumaDeReportesProcesados = int(r.cantReportesIgnorados.strip()) + int(r.cantReportesBloqueados.strip())
         if sumaDeReportesProcesados > cantDelQueMasProceso:
             posDelQueMasProceso = variableDeArchivoLogicaModeradores.tell()
             cantDelQueMasProceso = sumaDeReportesProcesados
     return posDelQueMasProceso
            
-
-def reportesEstadisticosSiendoAdmi():
+def reportesEstadisticosSiendoAdmi() -> int:
     os.system('cls')
     cantReportes = contarReportes()
     print('REPORTES ESTADISTICOS')
     print('CANTIDAD DE REPORTES REALIZADOS POR LOS ESTUDIANTES: ',contarReportes())
     print()
-    print('PORCENTAJE DE REPORTES IGNORADOS: ',str(reportesIgnorados() * 100 // cantReportes) + '%')
+    print('PORCENTAJE DE REPORTES IGNORADOS: ',str(reportesIgnorados() * 100 // cantReportes) + '%') 
     print()
     print('PORCENTAJE DE REPORTES ACEPTADOS: ',str(reportesAceptados() * 100 // cantReportes) + '%')
     print()
-    variableDeArchivoLogicaModeradores.seek(moderadorQueMasReportesIgnoro(),0)
-    r = pickle.load(variableDeArchivoLogicaModeradores)
-    print('EL MODERADOR QUE MAS REPORTES IGNORO FUE EL DE ID: ',r.id)
-    print()
-    variableDeArchivoLogicaModeradores.seek(moderadorQueMasReportesBloqueo(),0)
-    r = pickle.load(variableDeArchivoLogicaModeradores)
-    print('EL MODERADOR QUE MAS REPORTES BLOQUEO FUE EL DE ID: ',r.id)
-    print()
-    variableDeArchivoLogicaModeradores.seek(moderadorQueMasReportesProceso(),0)
-    r = pickle.load(variableDeArchivoLogicaModeradores)
-    print('EL MODERADOR QUE MAS REPORTES PROCESO FUE EL DE ID: ',r.id)
-    print()
+    if reportesIgnorados() == 0:
+        print('No hay reportes ignorados. ')
+    else:
+        variableDeArchivoLogicaModeradores.seek(moderadorQueMasReportesIgnoro(),0)
+        r = pickle.load(variableDeArchivoLogicaModeradores)
+        print('EL MODERADOR QUE MAS REPORTES IGNORO FUE EL DE ID: ',r.id)
+        print()
+    if reportesAceptados() == 0:
+        print('No hay reportes bloqueados')
+    else:
+        variableDeArchivoLogicaModeradores.seek(moderadorQueMasReportesBloqueo(),0)
+        r = pickle.load(variableDeArchivoLogicaModeradores)
+        print('EL MODERADOR QUE MAS REPORTES BLOQUEO FUE EL DE ID: ',r.id)
+        print()
+    if reportesAceptados() + reportesIgnorados() == 0:
+        print('No se han procesado Reportes todavia')
+        print()
+    else:
+        variableDeArchivoLogicaModeradores.seek(moderadorQueMasReportesProceso(),0)
+        r = pickle.load(variableDeArchivoLogicaModeradores)
+        print('EL MODERADOR QUE MAS REPORTES PROCESO FUE EL DE ID: ',r.id)
+        print()
     os.system('pause')
 #------------------------------------------------------    
-        
-    
+
+def cargaAdmi():
+    vr = administrador()
+    vr.id = 0
+    vr.email = 'admi'
+    vr.contraseña = 'admi'
+    formatearAdmins(vr)
+    pickle.dump(vr,variableDeArchivoLogicaAdministradores)
+    variableDeArchivoLogicaAdministradores.flush()
+    ...        
+
+def cargarEstudiante0():
+    vr = estudiante()
+    variableDeArchivoLogicaEstudiantes.seek(0,0)
+    vr.nombre = 'Franco'
+    vr.id = 0
+    vr.email = 'fran'
+    vr.contraseña = 'fran'
+    vr.estado = True
+    vr.sexo = 'M'
+    vr.datosPersonales[0] = 'Hobbies de Franco'
+    vr.datosPersonales[1] = 'Matematica'
+    vr.datosPersonales[2] = 'Futbol'
+    vr.datosPersonales[3] = 'AyED'
+    vr.datosPersonales[4] = 'Fisica'
+    vr.datosPersonales[5] = 'Biografia de Franco'
+    vr.datosPersonales[6] = 'Argentina'
+    vr.datosPersonales[7] = 'Casilda'
+    vr.datosPersonales[8] = '2004/01/12'
+    formatearEstudiantes(vr)
+    pickle.dump(vr,variableDeArchivoLogicaEstudiantes)
+    variableDeArchivoLogicaEstudiantes.flush()
+def cargarEstudiante1():
+    vr = estudiante()
+    variableDeArchivoLogicaEstudiantes.seek(0,2)
+    vr.nombre = 'Matias'
+    vr.id = 1
+    vr.email = 'mati'
+    vr.contraseña = 'mati'
+    vr.estado = True
+    vr.sexo = 'M'
+    vr.datosPersonales[0] = 'Hobbies de Matias'
+    vr.datosPersonales[1] = 'Matematica'
+    vr.datosPersonales[2] = 'Futbol'
+    vr.datosPersonales[3] = 'AyED'
+    vr.datosPersonales[4] = 'Fisica'
+    vr.datosPersonales[5] = 'Biografia de Matias'
+    vr.datosPersonales[6] = 'Argentina'
+    vr.datosPersonales[7] = 'Fisherton'
+    vr.datosPersonales[8] = '2006/06/15'
+    formatearEstudiantes(vr)
+    pickle.dump(vr,variableDeArchivoLogicaEstudiantes)
+    variableDeArchivoLogicaEstudiantes.flush()
+def cargaEstudiante2(): 
+    vr = estudiante()
+    variableDeArchivoLogicaEstudiantes.seek(0,2)
+    vr.nombre = 'Alejo'
+    vr.id = 2
+    vr.email = 'ale'
+    vr.contraseña = 'ale'
+    vr.estado = True
+    vr.sexo = 'M'
+    vr.datosPersonales[0] = 'Hobbies de Alejo'
+    vr.datosPersonales[1] = 'Matematica'
+    vr.datosPersonales[2] = 'Futbol'
+    vr.datosPersonales[3] = 'AyED'
+    vr.datosPersonales[4] = 'Fisica'
+    vr.datosPersonales[5] = 'Biografia de Alejo'
+    vr.datosPersonales[6] = 'Argentina'
+    vr.datosPersonales[7] = 'Rosario'
+    vr.datosPersonales[8] = '2003/07/11'
+    formatearEstudiantes(vr)
+    pickle.dump(vr,variableDeArchivoLogicaEstudiantes)
+    variableDeArchivoLogicaEstudiantes.flush()
+def cargaEstuiante3():
+    vr = estudiante()
+    variableDeArchivoLogicaEstudiantes.seek(0,2)
+    vr.nombre = 'Manuel'
+    vr.id = 3
+    vr.email = 'manu'
+    vr.contraseña = 'manu'
+    vr.estado = True
+    vr.sexo = 'M'
+    vr.datosPersonales[0] = 'Hobbies de Manuel'
+    vr.datosPersonales[1] = 'Matematica'
+    vr.datosPersonales[2] = 'Futbol'
+    vr.datosPersonales[3] = 'AyED'
+    vr.datosPersonales[4] = 'Fisica'
+    vr.datosPersonales[5] = 'Biografia de Manuel'
+    vr.datosPersonales[6] = 'Argentina'
+    vr.datosPersonales[7] = 'Firmat'
+    vr.datosPersonales[8] = '2004/01/12'
+    formatearEstudiantes(vr)
+    pickle.dump(vr,variableDeArchivoLogicaEstudiantes)
+    variableDeArchivoLogicaEstudiantes.flush()    
+
+def cargar4Estudiantes():
+    cargarEstudiante0()
+    cargarEstudiante1()
+    cargaEstudiante2()
+    cargaEstuiante3()
 def main():
-    # Antes de entrar al menu de logueo, debemos pre cargar un admi y un mod.
-    # El usuario no va a poder loguearse hasta que no haya 4 estudiantes.
-    os.system('cls')
-    print('Pre-Carga de administrador y De moderador.')
-    os.system('pause')
     if os.path.getsize(variableDeArchivoFisicoAdministradores) == 0:
-        altaAdmins()
-    if os.path.getsize(variableDeArchivoFisicoModeradores) == 0:
-        altaModerador()
+        cargaAdmi()
+    if os.path.getsize(variableDeArchivoFisicoEstudiantes) == 0:
+        cargar4Estudiantes()
     logOReg = '1'
     while logOReg != '0':
         variableDeArchivoLogicaAdministradores.seek(0,0)
@@ -1219,20 +1324,28 @@ def main():
             print('Opcion Invalida! Intenta de nuevo. ')
             logOReg = input('Elige una opcion: ')
         if logOReg == '1':
-            cantEstudiantes = contarEstudiantes()
-            # cantMods = contarRegistros(variableDeArchivoFisicoModeradores,variableDeArchivoLogicaModeradores)
-            # cantAdmins = contarRegistros(variableDeArchivoFisicoAdministradores,variableDeArchivoLogicaAdministradores)
-            if cantEstudiantes < 4 :
-                print('No puedes loguearte! Tiene que haber minimo 4. En este momento existen ',cantEstudiantes,' estudiantes')
-                os.system('pause')
-            else:
-                print('REGISTROS: ')
-                mostrarRegistros()
-                tipoDeUsuarioLogueado = logueo()
-                if tipoDeUsuarioLogueado == 'e': 
+            tipoDeUsuarioLogueado = logueo()
+            if tipoDeUsuarioLogueado == 'a':
+                    posDelAdmiLogueado = variableDeArchivoLogicaAdministradores.tell() - devolvertamañoDeRegistroDeArchivoAdministradores()
+                    op = '1'
+                    while op != '0':
+                        menuPrincipalAdministradores()
+                        op = input('Elige una opcion: ')
+                        while op != '0' and op != '1' and op != '2' and op != '3':
+                            print('Opcion invalida! Intenta de nuevo. ')
+                            op = input('Elige una opcion: ')
+                        match op:
+                            case '1':
+                                gestionarUsuariosSiendoAdmi()
+                            case '2':
+                                gestionarReportes(posDelAdmiLogueado)
+                            case '3':
+                                reportesEstadisticosSiendoAdmi()
+                            case '0':
+                                print('Volviendo a la seccion de logueo')
+                                os.system('pause')
+            elif tipoDeUsuarioLogueado == 'e': 
                     posDelRegistroDelEstudianteLogueado = variableDeArchivoLogicaEstudiantes.tell() - devolvertamañoDeRegistroDeArchivoEstudiantes()
-                    print('Se logueo un estudiante! Su posicion en el archivo es: ',posDelRegistroDelEstudianteLogueado)
-                    input()
                     op = '1'
                     while op != '0':
                         menuPrincipalEstudiante()
@@ -1256,8 +1369,8 @@ def main():
                             case '0':
                                 print('Volviendo a la seccion de logueo...')
                                 os.system('pause')
-
-                elif tipoDeUsuarioLogueado == 'm':
+                                
+            elif tipoDeUsuarioLogueado == 'm':
                     posDelModLogueado = variableDeArchivoLogicaModeradores.tell() - devolvertamañoDeRegistroDeArchivoModeradores()
                     op = '1'
                     while op != '0':
@@ -1273,31 +1386,12 @@ def main():
                                 gestionarReportes(posDelModLogueado)
                             case '3':
                                 print('En Contruccion! Disculpa las molestias.')
+                                os.system('Pause')
                             case '0':
                                 print('Volviendo a la seccion de logueo...')
-                                os.system('pause')
-                elif tipoDeUsuarioLogueado == 'a':
-                    posDelAdmiLogueado = variableDeArchivoLogicaAdministradores.tell() - devolvertamañoDeRegistroDeArchivoAdministradores()
-                    print('ESTO ME TIENE QUE DAR 0: ',posDelAdmiLogueado)
-                    op = '1'
-                    while op != '0':
-                        menuPrincipalAdministradores()
-                        op = input('Elige una opcion: ')
-                        while op != '0' and op != '1' and op != '2' and op != '3':
-                            print('Opcion invalida! Intenta de nuevo. ')
-                            op = input('Elige una opcion: ')
-                        match op:
-                            case '1':
-                                gestionarUsuariosSiendoAdmi()
-                            case '2':
-                                gestionarReportes(posDelAdmiLogueado)
-                            case '3':
-                                reportesEstadisticosSiendoAdmi()
-                            case '0':
-                                print('Volviendo a la seccion de logueo')
-                                os.system('pause')
-                                    
-                else:
+                                print()
+                                os.system('pause')                  
+            else:
                     print('No se logueo nadie. Vuelve mas tarde')
                     logOReg = '0'
         elif logOReg == '2':
@@ -1308,6 +1402,8 @@ def main():
     variableDeArchivoLogicaAdministradores.close()
     variableDeArchivoLogicaEstudiantes.close()
     variableDeArchivoLogicaModeradores.close()
+    variableDeArchivoLogicaLikes.close()
+    variableLogicaDeArchivoReportes.close()
     
     
 variableDeArchivoFisicoEstudiantes = 'C:\\AYED\\Estudiantes.dat'
