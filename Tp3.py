@@ -1,9 +1,9 @@
-import os 
-import os.path
-import pickle
-import msvcrt
-import sys
-from datetime import datetime
+import os # para usar os.system('cls' / 'pause')
+import os.path # para poder acceder a las rutas de los arrchivos, osea a sus variables fisicas
+import pickle # para usar el load y el dump
+import msvcrt # para usar el getpass
+import sys # Tambien para el getpass
+from datetime import datetime #  para las fechas
 
 '''
 
@@ -12,7 +12,6 @@ from datetime import datetime
  COM 101
  
 '''
-
 fecha_actual = datetime.now()   # Aqui calculamos la fecha de hoy con uso de la libreria Datetime
 año_actual = fecha_actual.year  # Aqui calculamos el año actual con uso de la libreria Datetime
 mes_actual = fecha_actual.month # Aqui calculamos el mes actual con uso de la libreria Datetime   
@@ -38,7 +37,7 @@ def getpass_custom(prompt='Password: '):
             sys.stdout.flush()
  
 # calcularEdad: str -> int
-# Recibe la fecha en formato date, la procesa y nos calcula la edad.               
+# Recibe la fecha en formato string,la convierte en tipo datetime, la procesa y nos calcula la edad.               
 def calcularEdad(fecha : str) -> int:
     fechaAux = datetime.strptime(fecha.strip(),'%Y/%m/%d')
     año = fechaAux.year
@@ -97,7 +96,7 @@ class reportes:
 #------------------------------------------------------
 # FUNCIONES RELACIONADAS A BUSQUEDAS     
 
-def busquedaSecuencialDeIdEstudiantes(id : int) -> int:
+def busquedaSecuencialDeIdEstudiantes(id : str) -> int:
     
     # Var
     # tamañoArchivo,pos : int
@@ -109,10 +108,10 @@ def busquedaSecuencialDeIdEstudiantes(id : int) -> int:
     while variableDeArchivoLogicaEstudiantes.tell() < tamañoArchivo and variableDeRegistro.id.strip() != id:
         pos = variableDeArchivoLogicaEstudiantes.tell()
         variableDeRegistro = pickle.load(variableDeArchivoLogicaEstudiantes)
-    if variableDeRegistro.id.strip() == id.strip():
+    if variableDeRegistro.id.strip() == id:
         return pos
     return -1
-def busquedaSecuencialDeIdModeradores(id : int) -> int:
+def busquedaSecuencialDeIdModeradores(id : str) -> int:
     
     
     # Var
@@ -382,15 +381,6 @@ def altaEstudiantes() -> None:
     variableDeArchivoLogicaEstudiantes.flush()
     os.system('pause')
 
-def altaLikes(idRemitente : str,idDestinatario : str):
-    variableDeArchivoLogicaLikes.seek(0,2)
-    variableDeRegistroLikes = likes()
-    variableDeRegistroLikes.remitente = idRemitente
-    variableDeRegistroLikes.destinatario = idDestinatario
-    formatearLikes(variableDeRegistroLikes)
-    pickle.dump(variableDeRegistroLikes,variableDeArchivoLogicaLikes)
-    variableDeArchivoLogicaLikes.flush()
-    print('Like dado de alta correctamente. ')
 
 def altaReportes(idReportante : str,idReportado : str):
     variableLogicaDeArchivoReportes.seek(0,2)
@@ -413,6 +403,7 @@ def altaReportes(idReportante : str,idReportado : str):
 #------------------------------------------------------
 # FUNCIONES REFERIDAS A LOS LIKES    
 # LO QUE HACE EL .strip() es sacar los espacios en blanco dados por el formateo   
+    
 def leDioLike(idRemitente : str,idDestinatario : str) -> int:
     tamArchivoLikes = os.path.getsize(variableDeArchivoFisicoLikes)
     variableDeArchivoLogicaLikes.seek(0,0)
@@ -467,6 +458,15 @@ def likeRecibidioYNoRespondido(idRemitente : str)-> int:
                 cantDeLikesRecibidosYNoRespondidos += 1
     return cantDeLikesRecibidosYNoRespondidos
         
+def altaLikes(idRemitente : str,idDestinatario : str):
+        variableDeArchivoLogicaLikes.seek(0,2)
+        variableDeRegistroLikes = likes()
+        variableDeRegistroLikes.remitente = idRemitente
+        variableDeRegistroLikes.destinatario = idDestinatario
+        formatearLikes(variableDeRegistroLikes)
+        pickle.dump(variableDeRegistroLikes,variableDeArchivoLogicaLikes)
+        variableDeArchivoLogicaLikes.flush()
+        print('Like dado de alta correctamente. ')
 #------------------------------------------------------
 # FUNCIONES PARA CHEQUEAR LOGUEO CORRECTO    
     
@@ -663,7 +663,8 @@ def imprimirOpcionesACambiar(registro : estudiante):
     print('4. Ciudad ')
     print('0. Volver')
     
-def eliminarPerfilEstudiantes(pos : int):
+def eliminarPerfilEstudiantes(id : str):
+    pos = busquedaSecuencialDeIdEstudiantes(id)
     variableDeArchivoLogicaEstudiantes.seek(pos,0)
     registro = pickle.load(variableDeArchivoLogicaEstudiantes)
     print('ATENCION')
@@ -678,7 +679,6 @@ def eliminarPerfilEstudiantes(pos : int):
         variableDeArchivoLogicaEstudiantes.flush()
     else:
         print('Decidiste no eliminar el perfil! ')
-    os.system('pause')
    
 def gestionarMiPerfil(pos : int):
     os.system('cls')
@@ -847,10 +847,9 @@ def reportesEstadisticos(pos : int):
     os.system('cls')
     tam = os.path.getsize(variableDeArchivoFisicoLikes)
     variableDeArchivoLogicaLikes.seek(0,0)
-    vr = pickle.load(variableDeArchivoLogicaLikes)
     while variableDeArchivoLogicaLikes.tell() < tam:
-        print(vr.remitente,vr.destinatario)
         vr = pickle.load(variableDeArchivoLogicaLikes) 
+        print(vr.remitente,vr.destinatario)
     variableDeArchivoLogicaEstudiantes.seek(pos,0)
     vr = pickle.load(variableDeArchivoLogicaEstudiantes)
     id = vr.id.strip()
@@ -896,14 +895,14 @@ def gestionarUsuarios():
         print('Opcion invalida! Intenta de nuevo ')        
         op = input('Elige una opcion: ')
     if op == 'a':
-        pos = input('Ingresa el id de usuario a descativar: ')
+        pos = input('Ingresa el id de usuario a descativar: ').strip()
         while busquedaSecuencialDeIdEstudiantes(pos) == -1:
             print('ID invalida. Intenta de nuevo')
             pos = input('Ingresa el id de usuario a descativar: ')   
         eliminarPerfilEstudiantes(pos)
     else:
         print('Volviendo al menu anterior...')
-
+    os.system('pause')
 
     os.system('cls')
     print()
@@ -1069,8 +1068,7 @@ def eliminarPerfilMods(pos : int):
         pickle.dump(registro,variableDeArchivoLogicaModeradores)
         variableDeArchivoLogicaModeradores.flush()
     else:
-        print('Decidiste no eliminar el perfil! ')
-    os.system('pause')  
+        print('Decidiste no eliminar el perfil! ') 
       
 def eliminarUsuarioSiendoAdmi():
     os.system('cls')
@@ -1100,7 +1098,6 @@ def eliminarUsuarioSiendoAdmi():
             moderadorAEliminar = input('Ingresa ID de moderador a eliminar: ')
             posAEliminar = busquedaSecuencialDeIdModeradores(moderadorAEliminar) 
         eliminarPerfilMods(moderadorAEliminar)
-    os.system('pause')
     
 def gestionarUsuariosSiendoAdmi():
     mostrarOpcionesGestionarUsuariosSiendoAdmi()
