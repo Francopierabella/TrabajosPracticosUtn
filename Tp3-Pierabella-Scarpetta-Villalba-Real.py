@@ -1,5 +1,5 @@
 import os # para usar os.system('cls' / 'pause')
-import os.path # para poder acceder a las rutas de los arrchivos, osea a sus variables fisicas
+import os.path # para poder acceder a las rutas de los archivos, osea a sus variables fisicas
 import pickle # para usar el load y el dump
 import msvcrt # para usar el getpass
 import sys # Tambien para el getpass
@@ -329,6 +329,7 @@ def altaModerador() -> None:
     variableDeRegistroMods.cantReportesIgnorados = 0
     variableDeRegistroMods.cantReportesBloqueados = 0
     formatearMods(variableDeRegistroMods)
+    variableDeArchivoLogicaModeradores.seek(0,2)
     pickle.dump(variableDeRegistroMods,variableDeArchivoLogicaModeradores)
     variableDeArchivoLogicaModeradores.flush()
      
@@ -431,6 +432,7 @@ def porcentajeDeLikesDadosYRecibidos(idRemitente : str) -> int:
                 cantDeLikesDadosYRecibidos += 1
     porcentajeDeLikesDadosYRecibidos = cantDeLikesDadosYRecibidos * 100 // contarEstudiantes()
     return porcentajeDeLikesDadosYRecibidos
+
 
 def likeDadoYNoRecibido(idRemitente : str)-> int:
     tamArchivoLikes = os.path.getsize(variableDeArchivoFisicoLikes)
@@ -581,12 +583,12 @@ def devolverTamañoDeRegistroDeArchivoReportes() -> int:
 #------------------------------------------------------
 # FUNCIONES PARA MOSTRAR ESTUDIANTES O REPORTES (PUEDEN SER BORRADAS SI SE QUIERE)
 def mostrarRegistros ():
-    tamEst = os.path.getsize(variableDeArchivoFisicoEstudiantes)
+    tamEst = os.path.getsize(variableDeArchivoFisicoModeradores)
     if tamEst != 0:
-        variableDeArchivoLogicaEstudiantes.seek(0,0)
-        while variableDeArchivoLogicaEstudiantes.tell() < tamEst :
-            reg = pickle.load(variableDeArchivoLogicaEstudiantes)
-            print('ID: ',reg.id.strip(), 'Nombre: ',reg.nombre.strip(),' Email: ',reg.email.strip(), ' Contraseña: ',reg.contraseña.strip(),'Estado: ',reg.estado.strip())
+        variableDeArchivoLogicaModeradores.seek(0,0)
+        while variableDeArchivoLogicaModeradores.tell() < tamEst :
+            reg = pickle.load(variableDeArchivoLogicaModeradores)
+            print('ID: ',reg.id.strip(),' Email: ',reg.email.strip(), ' Contraseña: ',reg.contraseña.strip(),'Estado: ',reg.estado.strip())
     os.system('pause')
 
 def mostrarReportes():
@@ -679,6 +681,7 @@ def eliminarPerfilEstudiantes(id : str):
         variableDeArchivoLogicaEstudiantes.flush()
     else:
         print('Decidiste no eliminar el perfil! ')
+    os.system('pause')
    
 def gestionarMiPerfil(pos : int):
     os.system('cls')
@@ -723,31 +726,30 @@ def gestionarMiPerfil(pos : int):
                     bioNueva = input('Ingresa tu nueva Biografia: ')
                     registro.datosPersonales[5] = bioNueva
                     actualizoAlgunDato = True
-                    
+
                 case '4':
                     ciudadNueva = input('Ingresa tu nueva ciudad: ')
                     registro.datosPersonales[7] = ciudadNueva
                     actualizoAlgunDato = True
-            formatearEstudiantes(registro)
-            pickle.dump(registro,variableDeArchivoLogicaEstudiantes)
-            variableDeArchivoLogicaEstudiantes.flush()
+        formatearEstudiantes(registro)
+        variableDeArchivoLogicaEstudiantes.seek(pos,0)
+        pickle.dump(registro,variableDeArchivoLogicaEstudiantes)
+        variableDeArchivoLogicaEstudiantes.flush()
         if actualizoAlgunDato:
             # SI TENGO TIEMPO AGREGAR MAS DATOS TODO
             print('Datos actualizados!  Aqui tienes los resultados: ')
-            print('Tu nuevo hobbie: ',registro.datosPersonales[0]) if hobbieActual != registro.datosPersonales[0] else print('Hobbie: ',registro.datosPersonales[0])
-            print('Tu nueva fecha de nacimiento: ',registro.datosPersonales[8]) if fechaActual != registro.datosPersonales[8] else print('Fecha de nacimiento: ',registro.datosPersonales[8])
-            print('tu nueva Biografia: ',registro.datosPersonales[5]) if bioActual != registro.datosPersonales[5] else print('Biografia: ',registro.datosPersonales[5])
-            print('Tu nueva ciudad: ',registro.datosPersonales[7]) if ciudadActual != registro.datosPersonales[7] else print('Ciudad: ',registro.datosPersonales[7])
+            print('Tu nuevo hobbie: ',registro.datosPersonales[0].strip()) if hobbieActual != registro.datosPersonales[0] else print('Hobbie: ',registro.datosPersonales[0].strip())
+            print('Tu nueva fecha de nacimiento: ',registro.datosPersonales[8].strip()) if fechaActual != registro.datosPersonales[8] else print('Fecha de nacimiento: ',registro.datosPersonales[8].strip())
+            print('tu nueva Biografia: ',registro.datosPersonales[5].strip()) if bioActual != registro.datosPersonales[5] else print('Biografia: ',registro.datosPersonales[5].strip())
+            print('Tu nueva ciudad: ',registro.datosPersonales[7].strip()) if ciudadActual != registro.datosPersonales[7] else print('Ciudad: ',registro.datosPersonales[7].strip())
         else:
             print('No actualizaste datos. ')
             print('Volviendo al menu anterior...')
-        os.system('pause') 
-
     elif op == 'b':
-        eliminarPerfilEstudiantes(pos)
+        eliminarPerfilEstudiantes(registro.id.strip())
     else:
         print('Volviendo al menu anterior...')
-        os.system('pause')
+    os.system('pause')
         
 def mostrarOpcionesDeGestionarCandidatos():
     os.system('cls') 
@@ -784,13 +786,16 @@ def verCandidatos(pos : int):
     variableDeArchivoLogicaEstudiantes.seek(pos,0)
     vrRemitente = pickle.load(variableDeArchivoLogicaEstudiantes)
     variableDeArchivoLogicaEstudiantes.seek(0,0)
-    nombreDelQueTeGusta = input('Ingresa el nombre del estudiante que te gusta: ')
+    nombreDelQueTeGusta = input('Ingresa el nombre del estudiante que te gusta: ').capitalize()
     while busquedaSecuencialDeNombre(nombreDelQueTeGusta,pos) == -1:
         print('Nombre incorrecto. Intenta de nuevo')
-        nombreDelQueTeGusta = input('Ingresa el nombre del estudiante que te gusta: ')
+        nombreDelQueTeGusta = input('Ingresa el nombre del estudiante que te gusta: ').capitalize()
     variableDeArchivoLogicaEstudiantes.seek(busquedaSecuencialDeNombre(nombreDelQueTeGusta,pos),0)
     vrDestinatario = pickle.load(variableDeArchivoLogicaEstudiantes)
-    altaLikes(vrRemitente.id,vrDestinatario.id)
+    if leDioLike(vrRemitente.id.strip(),vrDestinatario.id.strip()) == 1:
+        print('Ya le has dado like a ese estudiante! Se ha cancelado el Like. ')
+    else:
+        altaLikes(vrRemitente.id,vrDestinatario.id)
 
 def reportarUnCandidato(pos : int):
     variableDeArchivoLogicaEstudiantes.seek(pos,0)
@@ -846,21 +851,24 @@ def matcheos():
 def reportesEstadisticos(pos : int):
     os.system('cls')
     tam = os.path.getsize(variableDeArchivoFisicoLikes)
-    variableDeArchivoLogicaLikes.seek(0,0)
-    while variableDeArchivoLogicaLikes.tell() < tam:
-        vr = pickle.load(variableDeArchivoLogicaLikes) 
-        print(vr.remitente,vr.destinatario)
-    variableDeArchivoLogicaEstudiantes.seek(pos,0)
-    vr = pickle.load(variableDeArchivoLogicaEstudiantes)
-    id = vr.id.strip()
-    print('REPORTES ESTADISTICOS DE ESTUDIANTE DE ID: ',id)
-    print()
-    print('Matcheados sobre el % posible: ',str(porcentajeDeLikesDadosYRecibidos(id)) + '%')
-    print()
-    print('Likes dados y no recibidos: ',likeDadoYNoRecibido(id))
-    print()
-    print('Likes recibidos y no respondidos: ',likeRecibidioYNoRespondido(id))
-    print()
+    if tam == 0:
+        print('No hay likes por el momento! Vuelve mas tarde.')
+    else:
+        variableDeArchivoLogicaLikes.seek(0,0)
+        while variableDeArchivoLogicaLikes.tell() < tam:
+            vr = pickle.load(variableDeArchivoLogicaLikes) 
+            print(vr.remitente,vr.destinatario)
+        variableDeArchivoLogicaEstudiantes.seek(pos,0)
+        vr = pickle.load(variableDeArchivoLogicaEstudiantes)
+        id = vr.id.strip()
+        print('REPORTES ESTADISTICOS DE ESTUDIANTE DE ID: ',id)
+        print()
+        print('Matcheados sobre el % posible: ',str(porcentajeDeLikesDadosYRecibidos(id)) + '%')
+        print()
+        print('Likes dados y no recibidos: ',likeDadoYNoRecibido(id))
+        print()
+        print('Likes recibidos y no respondidos: ',likeRecibidioYNoRespondido(id))
+        print()
     os.system('pause')
     
 # --------------------------------------------------------------------
@@ -898,8 +906,13 @@ def gestionarUsuarios():
         pos = input('Ingresa el id de usuario a descativar: ').strip()
         while busquedaSecuencialDeIdEstudiantes(pos) == -1:
             print('ID invalida. Intenta de nuevo')
-            pos = input('Ingresa el id de usuario a descativar: ')   
-        eliminarPerfilEstudiantes(pos)
+            pos = input('Ingresa el id de usuario a descativar: ') 
+        variableDeArchivoLogicaEstudiantes.seek(busquedaSecuencialDeIdEstudiantes(pos))
+        vr = pickle.load(variableDeArchivoLogicaEstudiantes)
+        if vr.estado == 'False':
+            print('Estudiante de ID ',vr.id.strip(),' ya esta inactivo!')
+        else:
+            eliminarPerfilEstudiantes(pos)
     else:
         print('Volviendo al menu anterior...')
     os.system('pause')
@@ -975,13 +988,13 @@ def verReportes(posMod  : int):
                         r = pickle.load(variableDeArchivoLogicaModeradores)
                         r.cantReportesIgnorados = str(int(r.cantReportesIgnorados.strip()) + 1)
                         formatearMods(r)
+                        print('ID: ',r.id,'reportes ig: ', r.cantReportesIgnorados,' Reportes Bloq: ',r.cantReportesBloqueados)
+                        variableDeArchivoLogicaModeradores.seek(posMod,0)
                         pickle.dump(r,variableDeArchivoLogicaModeradores)
                         variableDeArchivoLogicaModeradores.flush()
-                    print(variableLogicaDeArchivoReportes.tell())
                     formatearReportes(reporte)
                     variableLogicaDeArchivoReportes.seek(i,0)
                     pickle.dump(reporte,variableLogicaDeArchivoReportes)
-                    print(variableLogicaDeArchivoReportes.tell())
                     variableLogicaDeArchivoReportes.flush()
                 elif op == '2':
                     reporte.estado = 1
@@ -992,13 +1005,13 @@ def verReportes(posMod  : int):
                         r = pickle.load(variableDeArchivoLogicaModeradores)
                         r.cantReportesBloqueados = str(int(r.cantReportesBloqueados.strip()) + 1)
                         formatearMods(r)
+                        print('ID: ',r.id,'reportes ig: ', r.cantReportesIgnorados,' Reportes Bloq: ',r.cantReportesBloqueados)
+                        variableDeArchivoLogicaModeradores.seek(posMod,0)
                         pickle.dump(r,variableDeArchivoLogicaModeradores)
                         variableDeArchivoLogicaModeradores.flush()
-                    print(variableLogicaDeArchivoReportes.tell())
                     formatearReportes(reporte)
                     variableLogicaDeArchivoReportes.seek(i,0)
                     pickle.dump(reporte,variableLogicaDeArchivoReportes)
-                    print(variableLogicaDeArchivoReportes.tell())
                     variableLogicaDeArchivoReportes.flush()
                 else:
                     sigueViendoReportes = False 
@@ -1046,18 +1059,18 @@ def mostrarOpcionesGestionarUsuariosSiendoAdmi():
     print('')
     print('                       GESTIONAR USUARIOS')
     print()
-    print('a. Eliminar un usuario ')
+    print('a. Desactivar un usuario ')
     print()
     print('b. Dar de alta un moderador ')
     print()
-    print('c. Desactivar usuario ')
-    print()
-    print('d. Volver')
+    print('c. Volver')
 
-def eliminarPerfilMods(pos : int):
+def eliminarPerfilMods(id : str):
+    pos = busquedaSecuencialDeIdModeradores(id)
     variableDeArchivoLogicaModeradores.seek(pos,0)
     registro = pickle.load(variableDeArchivoLogicaModeradores)
     print('ATENCION')
+    print()
     eliminar = input('Estas seguro que deseas eliminar el perfil? Responde si ó no: ').lower()
     while eliminar != 'si' and eliminar != 'no':
         print('Opcion invalida! Intenta de nuevo. ')
@@ -1067,6 +1080,7 @@ def eliminarPerfilMods(pos : int):
         variableDeArchivoLogicaModeradores.seek(pos,0)
         pickle.dump(registro,variableDeArchivoLogicaModeradores)
         variableDeArchivoLogicaModeradores.flush()
+        print('Moderador de ID: ',registro.id,' ha sido desactivado. ')
     else:
         print('Decidiste no eliminar el perfil! ') 
       
@@ -1089,15 +1103,28 @@ def eliminarUsuarioSiendoAdmi():
             print('ID invalida! Intenta de nuevo')
             estudianteAEliminar = input('Ingresa el ID del estudiante a eliminar: ')
             posAEliminar = busquedaSecuencialDeIdEstudiantes(estudianteAEliminar)
-        eliminarPerfilEstudiantes(posAEliminar)
+        variableDeArchivoLogicaEstudiantes.seek(posAEliminar,0)
+        vr = pickle.load(variableDeArchivoLogicaEstudiantes)
+        if vr.estado == 'False':
+            print('Estudiante de ID: ',vr.id.strip(),' ya esta inactivo! ')
+        else:
+            eliminarPerfilEstudiantes(estudianteAEliminar)
     else:
-        moderadorAEliminar = input('Ingresa ID de moderador a eliminar: ')
-        posAEliminar = busquedaSecuencialDeIdModeradores(moderadorAEliminar)
-        while posAEliminar == -1:
-            print('ID invalida! Intenta de nuevo ')
+        if os.path.getsize(variableDeArchivoFisicoModeradores) == 0:
+            print('No existen moderadores ! ')
+        else:
             moderadorAEliminar = input('Ingresa ID de moderador a eliminar: ')
-            posAEliminar = busquedaSecuencialDeIdModeradores(moderadorAEliminar) 
-        eliminarPerfilMods(moderadorAEliminar)
+            posAEliminar = busquedaSecuencialDeIdModeradores(moderadorAEliminar)
+            while posAEliminar == -1:
+                print('ID invalida! Intenta de nuevo ')
+                moderadorAEliminar = input('Ingresa ID de moderador a eliminar: ')
+                posAEliminar = busquedaSecuencialDeIdModeradores(moderadorAEliminar) 
+            variableDeArchivoLogicaModeradores.seek(posAEliminar,0)
+            vr = pickle.load(variableDeArchivoLogicaModeradores)
+            if vr.estado == 'False':
+                print('El moderador de ID: ',vr.id.strip(),' ya esta inactivo! ')
+            else:
+                eliminarPerfilMods(moderadorAEliminar)
     
 def gestionarUsuariosSiendoAdmi():
     mostrarOpcionesGestionarUsuariosSiendoAdmi()
@@ -1135,73 +1162,70 @@ def reportesAceptados() -> int:
 
 def moderadorQueMasReportesIgnoro() -> int:
     t = os.path.getsize(variableDeArchivoFisicoModeradores)
-    posDelQueMasIgnoro = 0
+    idDelQueMasIgnoro = ''
     cantDelQueMasIgnoro = 0
     variableDeArchivoLogicaModeradores.seek(0,0)
     while variableDeArchivoLogicaModeradores.tell() < t:
         r = pickle.load(variableDeArchivoLogicaModeradores)
         if int(r.cantReportesIgnorados.strip()) > cantDelQueMasIgnoro:
-            posDelQueMasIgnoro = variableDeArchivoLogicaModeradores.tell()
+            idDelQueMasIgnoro = r.id.strip()
             cantDelQueMasIgnoro = int(r.cantReportesIgnorados)
-    return posDelQueMasIgnoro
+    return idDelQueMasIgnoro
 
 def moderadorQueMasReportesBloqueo() -> int:
     t = os.path.getsize(variableDeArchivoFisicoModeradores)
-    posDelQueMasBloqueo = 0
+    idDelQueMasBloqueo = ''
     cantDelQueMasBloqueo = 0
     variableDeArchivoLogicaModeradores.seek(0,0)
-    while variableLogicaDeArchivoReportes.tell() < t:
+    while variableDeArchivoLogicaModeradores.tell() < t:
         r = pickle.load(variableDeArchivoLogicaModeradores)
         if int(r.cantReportesBloqueados.strip()) > cantDelQueMasBloqueo:
-            posDelQueMasBloqueo = variableDeArchivoLogicaModeradores.tell()
+            idDelQueMasBloqueo = r.id.strip()
             cantDelQueMasBloqueo = int(r.cantReportesBloqueados.strip())
-    return posDelQueMasBloqueo
+    return idDelQueMasBloqueo
 
 def moderadorQueMasReportesProceso() -> int:
     t = os.path.getsize(variableDeArchivoFisicoModeradores)
-    posDelQueMasProceso = 0
+    idDelQueMasProceso = ''
     cantDelQueMasProceso = 0
     variableDeArchivoLogicaModeradores.seek(0,0)
     while variableDeArchivoLogicaModeradores.tell() < t:
         r = pickle.load(variableDeArchivoLogicaModeradores)
         sumaDeReportesProcesados = int(r.cantReportesIgnorados.strip()) + int(r.cantReportesBloqueados.strip())
         if sumaDeReportesProcesados > cantDelQueMasProceso:
-            posDelQueMasProceso = variableDeArchivoLogicaModeradores.tell()
+            idDelQueMasProceso = r.id.strip()
             cantDelQueMasProceso = sumaDeReportesProcesados
-    return posDelQueMasProceso
+    return idDelQueMasProceso
            
 def reportesEstadisticosSiendoAdmi() -> int:
     os.system('cls')
     cantReportes = contarReportes()
-    print('REPORTES ESTADISTICOS')
-    print('CANTIDAD DE REPORTES REALIZADOS POR LOS ESTUDIANTES: ',contarReportes())
-    print()
-    print('PORCENTAJE DE REPORTES IGNORADOS: ',str(reportesIgnorados() * 100 // cantReportes) + '%') 
-    print()
-    print('PORCENTAJE DE REPORTES ACEPTADOS: ',str(reportesAceptados() * 100 // cantReportes) + '%')
-    print()
-    if reportesIgnorados() == 0:
-        print('No hay reportes ignorados. ')
+    if cantReportes == 0:
+        print('No existen reportes ! ')
     else:
-        variableDeArchivoLogicaModeradores.seek(moderadorQueMasReportesIgnoro(),0)
-        r = pickle.load(variableDeArchivoLogicaModeradores)
-        print('EL MODERADOR QUE MAS REPORTES IGNORO FUE EL DE ID: ',r.id)
+        print('REPORTES ESTADISTICOS')
+        print('CANTIDAD DE REPORTES REALIZADOS POR LOS ESTUDIANTES: ',contarReportes())
         print()
-    if reportesAceptados() == 0:
-        print('No hay reportes bloqueados')
-    else:
-        variableDeArchivoLogicaModeradores.seek(moderadorQueMasReportesBloqueo(),0)
-        r = pickle.load(variableDeArchivoLogicaModeradores)
-        print('EL MODERADOR QUE MAS REPORTES BLOQUEO FUE EL DE ID: ',r.id)
+        print('PORCENTAJE DE REPORTES IGNORADOS: ',str(reportesIgnorados() * 100 // cantReportes) + '%') 
         print()
-    if reportesAceptados() + reportesIgnorados() == 0:
-        print('No se han procesado Reportes todavia')
+        print('PORCENTAJE DE REPORTES ACEPTADOS: ',str(reportesAceptados() * 100 // cantReportes) + '%')
         print()
-    else:
-        variableDeArchivoLogicaModeradores.seek(moderadorQueMasReportesProceso(),0)
-        r = pickle.load(variableDeArchivoLogicaModeradores)
-        print('EL MODERADOR QUE MAS REPORTES PROCESO FUE EL DE ID: ',r.id)
-        print()
+        if reportesIgnorados() == 0:
+            print('No hay reportes ignorados. ')
+        else:
+            print('EL MODERADOR QUE MAS REPORTES IGNORO FUE EL DE ID: ',moderadorQueMasReportesIgnoro())
+            print()
+        if reportesAceptados() == 0:
+            print('No hay reportes bloqueados')
+        else:
+            print('EL MODERADOR QUE MAS REPORTES BLOQUEO FUE EL DE ID: ',moderadorQueMasReportesBloqueo())
+            print()
+        if reportesAceptados() + reportesIgnorados() == 0:
+            print('No se han procesado Reportes todavia')
+            print()
+        else:
+            print('EL MODERADOR QUE MAS REPORTES PROCESO FUE EL DE ID: ',moderadorQueMasReportesProceso())
+            print()
     os.system('pause')
 #------------------------------------------------------    
 
@@ -1212,10 +1236,9 @@ def cargaAdmi():
     vr.contraseña = 'admi'
     formatearAdmins(vr)
     pickle.dump(vr,variableDeArchivoLogicaAdministradores)
-    variableDeArchivoLogicaAdministradores.flush()
-    ...        
+    variableDeArchivoLogicaAdministradores.flush()     
 
-def cargarEstudiante0():
+def cargaEstudiante0():
     vr = estudiante()
     variableDeArchivoLogicaEstudiantes.seek(0,0)
     vr.nombre = 'Franco'
@@ -1236,7 +1259,7 @@ def cargarEstudiante0():
     formatearEstudiantes(vr)
     pickle.dump(vr,variableDeArchivoLogicaEstudiantes)
     variableDeArchivoLogicaEstudiantes.flush()
-def cargarEstudiante1():
+def cargaEstudiante1():
     vr = estudiante()
     variableDeArchivoLogicaEstudiantes.seek(0,2)
     vr.nombre = 'Matias'
@@ -1278,7 +1301,7 @@ def cargaEstudiante2():
     formatearEstudiantes(vr)
     pickle.dump(vr,variableDeArchivoLogicaEstudiantes)
     variableDeArchivoLogicaEstudiantes.flush()
-def cargaEstuiante3():
+def cargaEstudiante3():
     vr = estudiante()
     variableDeArchivoLogicaEstudiantes.seek(0,2)
     vr.nombre = 'Manuel'
@@ -1301,10 +1324,10 @@ def cargaEstuiante3():
     variableDeArchivoLogicaEstudiantes.flush()    
 
 def cargar4Estudiantes():
-    cargarEstudiante0()
-    cargarEstudiante1()
+    cargaEstudiante0()
+    cargaEstudiante1()
     cargaEstudiante2()
-    cargaEstuiante3()
+    cargaEstudiante3()
 def main():
     if os.path.getsize(variableDeArchivoFisicoAdministradores) == 0:
         cargaAdmi()
@@ -1408,6 +1431,7 @@ variableDeArchivoFisicoModeradores = 'C:\\AYED\\Moderadores.dat'
 variableDeArchivoFisicoAdministradores = 'C:\\AYED\\Administradores.dat'
 variableDeArchivoFisicoLikes = 'C:\\AYED\\Likes.dat'
 variableDeArchivoFisicoReportes = 'C:\\AYED\\Reportes.dat'
+
 
 if not os.path.exists(variableDeArchivoFisicoAdministradores):
     variableDeArchivoLogicaAdministradores = open (variableDeArchivoFisicoAdministradores,'w+b')
